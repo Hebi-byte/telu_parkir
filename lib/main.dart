@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'components/bottom_nav.dart';
+import 'section/Mahasiswa/leaderboard_section.dart';
 import 'section/Mahasiswa/dashboard_mahasiswa_section.dart';
 
 void main() {
@@ -59,7 +60,7 @@ class _MainNavigationState extends State<MainNavigation> {
             DashboardSection(
               onNavigate: (index) => setState(() => selectedIndex = index),
             ),
-            const SimplePage(title: 'Leaderboard', icon: Icons.emoji_events_outlined),
+            const LeaderboardSection(),
             const SimplePage(title: 'Report', icon: Icons.camera_alt_outlined),
             const SimplePage(title: 'Kehilangan', icon: Icons.key_outlined),
             const SimplePage(title: 'Profile', icon: Icons.person_outline),
