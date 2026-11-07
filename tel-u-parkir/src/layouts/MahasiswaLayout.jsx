@@ -22,6 +22,7 @@ export default function MahasiswaLayout({
         onSelectMenu={onSelectMenu}
         mobileOpen={mobileOpen}
         onCloseMobile={() => setMobileOpen(false)}
+        portalTitle="PORTAL MAHASISWA"
       />
 
       {/* Main Content Area: Offset by sidebar width on desktop (ml-[225px]) */}

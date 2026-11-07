@@ -15,15 +15,11 @@ export default function Sidebar({
   activeMenu = 'Dashboard',
   onSelectMenu,
   mobileOpen = false,
-  onCloseMobile
+  onCloseMobile,
+  portalTitle = 'PORTAL MAHASISWA',
+  portalIcon: PortalIcon = GraduationCap
 }) {
   const menuItems = [
-    {
-      id: 'Portal Mahasiswa',
-      label: 'PORTAL MAHASISWA',
-      icon: GraduationCap,
-      isSpecial: true
-    },
     {
       id: 'Dashboard',
       label: 'Dashboard',
@@ -98,24 +94,21 @@ export default function Sidebar({
             </button>
           </div>
 
+          {/* Portal Identifier Badge (Penanda Portal) */}
+          <div className="px-3.5 pt-4 pb-1">
+            <div className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-[#F4B4B8] bg-[#FDF3F3] text-[#BE1E2D] select-none">
+              <PortalIcon className="w-4 h-4 shrink-0 text-[#BE1E2D] stroke-[2.2]" />
+              <span className="text-xs font-bold tracking-wide text-[#BE1E2D] truncate">
+                {portalTitle}
+              </span>
+            </div>
+          </div>
+
           {/* Navigation Menu */}
-          <div className="px-3.5 py-4 space-y-1.5">
+          <div className="px-3.5 py-3 space-y-1.5">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeMenu === item.id;
-
-              if (item.isSpecial) {
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => handleMenuClick(item.id)}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer border border-[#BE1E2D]/30 bg-[#FCE8E8]/50 text-[#BE1E2D] hover:bg-[#FCE8E8] mb-2"
-                  >
-                    <Icon className="w-4 h-4 shrink-0 text-[#BE1E2D] stroke-[2.2]" />
-                    <span className="truncate">{item.label}</span>
-                  </button>
-                );
-              }
 
               return (
                 <button
