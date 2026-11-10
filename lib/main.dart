@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'components/bottom_nav.dart';
-import 'section/Mahasiswa/leaderboard_section.dart';
 import 'section/Mahasiswa/dashboard_mahasiswa_section.dart';
+import 'section/Mahasiswa/leaderboard_section.dart';
+import 'section/Mahasiswa/lost_key_section.dart';
+import 'section/Mahasiswa/profile_section.dart';
+import 'section/Mahasiswa/report_section.dart';
 
 void main() {
   runApp(const TelUParkirApp());
@@ -61,9 +65,9 @@ class _MainNavigationState extends State<MainNavigation> {
               onNavigate: (index) => setState(() => selectedIndex = index),
             ),
             const LeaderboardSection(),
-            const SimplePage(title: 'Report', icon: Icons.camera_alt_outlined),
-            const SimplePage(title: 'Kehilangan', icon: Icons.key_outlined),
-            const SimplePage(title: 'Profile', icon: Icons.person_outline),
+            const ReportSection(),
+            const LostKeySection(),
+            const ProfileSection(),
           ],
         ),
       ),
@@ -89,10 +93,15 @@ class SimplePage extends StatelessWidget {
         children: [
           Icon(icon, size: 54, color: const Color(0xFFB7192B)),
           const SizedBox(height: 12),
-          Text(title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 6),
-          const Text('Halaman ini dapat dikembangkan selanjutnya.',
-              style: TextStyle(color: Color(0xFF766866))),
+          const Text(
+            'Halaman ini dapat dikembangkan selanjutnya.',
+            style: TextStyle(color: Color(0xFF766866)),
+          ),
         ],
       ),
     );
