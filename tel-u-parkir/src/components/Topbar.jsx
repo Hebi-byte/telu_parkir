@@ -15,6 +15,7 @@ import {
 export default function Topbar({
   mahasiswa,
   notifikasi = [],
+  pageTitle = 'Dashboard',
   onOpenMobileSidebar,
   onOpenProfileModal
 }) {
@@ -62,7 +63,7 @@ export default function Topbar({
           <nav className="flex items-center text-xs sm:text-sm font-medium">
             <span className="text-[#8A7774]">Mahasiswa</span>
             <span className="mx-2 text-[#8A7774]/40">/</span>
-            <span className="text-[#242424] font-bold">Dashboard</span>
+            <span className="text-[#242424] font-bold">{pageTitle === 'Leaderboard' ? 'Leaderboard Pelanggaran' : pageTitle}</span>
           </nav>
 
           {/* Badge Semester */}

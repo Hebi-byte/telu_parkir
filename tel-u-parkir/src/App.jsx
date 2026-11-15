@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MahasiswaLayout from './layouts/MahasiswaLayout';
 import DashboardMahasiswa from './pages/DashboardMahasiswa';
+import LeaderboardMahasiswa from './pages/LeaderboardMahasiswa';
 import { dashboardData } from './data/dashboardData';
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
           data={data}
           onNavigateMenu={handleSelectMenu}
         />
+      ) : activeMenu === 'Leaderboard' ? (
+        <LeaderboardMahasiswa mahasiswa={data.mahasiswa} poin={data.akumulasiPoin.poin} />
       ) : (
         <div className="bg-white rounded-2xl p-10 border border-[#EDE4E2] text-center space-y-4">
           <div className="w-16 h-16 bg-[#FCE8E8] text-[#BE1E2D] rounded-full flex items-center justify-center mx-auto text-xl font-bold">

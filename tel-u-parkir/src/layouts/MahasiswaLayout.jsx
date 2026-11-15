@@ -31,6 +31,7 @@ export default function MahasiswaLayout({
         <Topbar
           mahasiswa={mahasiswa}
           notifikasi={notifikasi}
+          pageTitle={activeMenu}
           onOpenMobileSidebar={() => setMobileOpen(true)}
           onOpenProfileModal={onOpenProfileModal}
         />
