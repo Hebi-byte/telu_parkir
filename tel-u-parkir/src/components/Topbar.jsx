@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Bell,
   ChevronDown,
@@ -8,8 +8,7 @@ import {
   Settings,
   CheckCircle2,
   AlertCircle,
-  Info,
-  Calendar
+  Info
 } from 'lucide-react';
 
 export default function Topbar({
@@ -63,7 +62,13 @@ export default function Topbar({
           <nav className="flex items-center text-xs sm:text-sm font-medium">
             <span className="text-[#8A7774]">Mahasiswa</span>
             <span className="mx-2 text-[#8A7774]/40">/</span>
-            <span className="text-[#242424] font-bold">{pageTitle === 'Leaderboard' ? 'Leaderboard Pelanggaran' : pageTitle}</span>
+            <span className="text-[#242424] font-bold">
+              {pageTitle === 'Leaderboard'
+                ? 'Leaderboard Pelanggaran'
+                : pageTitle === 'Kehilangan'
+                  ? 'Kehilangan & Penemuan Kunci'
+                  : pageTitle}
+            </span>
           </nav>
 
           {/* Badge Semester */}
