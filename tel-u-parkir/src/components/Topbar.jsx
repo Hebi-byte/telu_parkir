@@ -67,6 +67,8 @@ export default function Topbar({
                 ? 'Leaderboard Pelanggaran'
                 : pageTitle === 'Kehilangan'
                   ? 'Kehilangan & Penemuan Kunci'
+                  : pageTitle === 'Lapor Parkir'
+                    ? 'Form Pelaporan Parkir'
                   : pageTitle}
             </span>
           </nav>

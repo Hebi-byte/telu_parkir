@@ -3,14 +3,47 @@ import MahasiswaLayout from './layouts/MahasiswaLayout';
 import DashboardMahasiswa from './pages/DashboardMahasiswa';
 import LeaderboardMahasiswa from './pages/LeaderboardMahasiswa';
 import KehilanganMahasiswa from './pages/KehilanganMahasiswa';
+import LaporParkirMahasiswa from './pages/LaporParkirMahasiswa';
 import { dashboardData } from './data/dashboardData';
+
+const initialParkingReports = [
+  {
+    id: 'LPR-001',
+    plate: 'D 3319 ZB',
+    location: 'Jalur Pedestrian',
+    time: 'Hari ini, 08:15 WIB',
+    createdAt: '2026-11-17T08:15:00+07:00',
+    status: 'Menunggu',
+  },
+  {
+    id: 'LPR-002',
+    plate: 'D 4521 TLU',
+    location: 'Parkiran FIT',
+    time: 'Kemarin, 14:32 WIB',
+    createdAt: '2026-11-16T14:32:00+07:00',
+    status: 'Dalam Peninjauan',
+  },
+  {
+    id: 'LPR-003',
+    plate: 'F 1042 ABC',
+    location: 'Parkiran Motor GKU / Tokong Nanas',
+    time: '12 Nov 2026, 10:20 WIB',
+    createdAt: '2026-11-12T10:20:00+07:00',
+    status: 'Terverifikasi',
+  },
+];
 
 function App() {
   const [activeMenu, setActiveMenu] = useState('Dashboard');
   const [data] = useState(dashboardData);
+  const [parkingReports, setParkingReports] = useState(initialParkingReports);
 
   const handleSelectMenu = (menuId) => {
     setActiveMenu(menuId);
+  };
+
+  const handleSubmitParkingReport = (report) => {
+    setParkingReports((currentReports) => [report, ...currentReports]);
   };
 
   return (
@@ -30,6 +63,11 @@ function App() {
         <LeaderboardMahasiswa mahasiswa={data.mahasiswa} poin={data.akumulasiPoin.poin} />
       ) : activeMenu === 'Kehilangan' ? (
         <KehilanganMahasiswa />
+      ) : activeMenu === 'Lapor Parkir' ? (
+        <LaporParkirMahasiswa
+          reports={parkingReports}
+          onSubmitReport={handleSubmitParkingReport}
+        />
       ) : (
         <div className="bg-white rounded-2xl p-10 border border-[#EDE4E2] text-center space-y-4">
           <div className="w-16 h-16 bg-[#FCE8E8] text-[#BE1E2D] rounded-full flex items-center justify-center mx-auto text-xl font-bold">
