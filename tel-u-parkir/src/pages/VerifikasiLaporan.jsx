@@ -12,10 +12,9 @@ import StatusBadge from '../components/StatusBadge';
 import { defaultReportId, loadReports, updateStoredReport } from '../data/reportData';
 
 const categories = [
-  { id: 'access', label: 'Menghalangi akses kendaraan', points: 4 },
+  { id: 'restricted', label: 'Parkir di area terlarang', points: 7 },
+  { id: 'access', label: 'Menghalangi akses kendaraan', points: 3 },
   { id: 'marking', label: 'Parkir tidak sesuai marka', points: 1 },
-  { id: 'restricted', label: 'Parkir di area terlarang', points: 3 },
-  { id: 'emergency', label: 'Jalur darurat / hydrant', points: 5 },
 ];
 
 const checksToComplete = [
