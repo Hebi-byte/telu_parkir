@@ -9,6 +9,7 @@ import {
   AlertCircle,
   Info,
 } from 'lucide-react';
+import { useSatpamProfile } from '../SatpamProfileContext';
 
 const initialNotifications = [
   { id: 1, title: 'Laporan prioritas baru', message: 'D 5482 UBW menunggu verifikasi.', time: '5 menit lalu', type: 'warning' },
@@ -17,6 +18,7 @@ const initialNotifications = [
 ];
 
 export default function Topbar({ pageTitle, breadcrumbItems, onOpenMobileSidebar }) {
+  const { profile } = useSatpamProfile();
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState(initialNotifications);
@@ -64,7 +66,7 @@ export default function Topbar({ pageTitle, breadcrumbItems, onOpenMobileSidebar
       <div className="flex shrink-0 items-center gap-3 sm:gap-5">
         <span className="hidden rounded-full bg-[#F5F2F0] px-2.5 py-1 text-xs font-semibold text-[#554a48] sm:inline-flex">
           <span className="mr-1.5 mt-1 h-1.5 w-1.5 rounded-full bg-[#8A7774]" />
-          Pos Gerbang 1
+          {profile.post.replace('Pos Satpam ', 'Pos ')}
         </span>
 
         <div className="relative" ref={notificationsRef}>
@@ -131,15 +133,15 @@ export default function Topbar({ pageTitle, breadcrumbItems, onOpenMobileSidebar
             className="flex items-center gap-2 rounded-lg p-1 hover:bg-[#FAF8F7]"
           >
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#FCE8E8] text-xs font-bold text-[#BE1E2D]">
-              BS
+              {profile.name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase()}
             </span>
-            <span className="hidden text-xs font-semibold sm:inline">Budi Santoso</span>
+            <span className="hidden text-xs font-semibold sm:inline">{profile.name}</span>
             <ChevronDown className={`h-3.5 w-3.5 text-[#8A7774] transition-transform ${profileOpen ? 'rotate-180' : ''}`} />
           </button>
           {profileOpen && (
             <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-[#EDE4E2] bg-white p-2 shadow-xl">
               <div className="border-b border-[#EDE4E2] px-3 py-2">
-                <p className="text-xs font-bold">Budi Santoso</p>
+                <p className="text-xs font-bold">{profile.name}</p>
                 <p className="mt-0.5 text-xs text-[#8A7774]">ID SPM-0142 · Satpam</p>
               </div>
               <button

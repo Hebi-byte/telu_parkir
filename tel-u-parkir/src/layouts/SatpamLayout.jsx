@@ -8,7 +8,7 @@ const pageTitles = {
   dashboard: 'Dashboard Satpam',
   verifikasi: 'Antrean Laporan',
   kehilangan: 'Kehilangan Kunci',
-  profil: 'Profil',
+  profil: 'Profil Satpam',
   riwayat: 'Riwayat Laporan',
 };
 
@@ -39,7 +39,9 @@ export default function SatpamLayout() {
             ? ['Satpam', 'Riwayat Laporan']
             : section === 'kehilangan'
               ? ['Satpam', 'Kehilangan']
-              : ['Satpam', pageTitle];
+              : section === 'profil'
+                ? ['Satpam', 'Profil Satpam']
+                : ['Satpam', pageTitle];
 
   return (
     <div className="min-h-screen bg-[#FAF8F7] text-[#242424]">
