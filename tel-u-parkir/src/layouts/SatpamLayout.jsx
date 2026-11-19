@@ -7,7 +7,7 @@ import Topbar from '../components/Topbar';
 const pageTitles = {
   dashboard: 'Dashboard Satpam',
   verifikasi: 'Antrean Laporan',
-  kehilangan: 'Kehilangan',
+  kehilangan: 'Kehilangan Kunci',
   profil: 'Profil',
   riwayat: 'Riwayat Laporan',
 };
@@ -17,22 +17,29 @@ export default function SatpamLayout() {
   const location = useLocation();
   const pathSegments = location.pathname.split('/').filter(Boolean);
   const section = pathSegments[1];
+  const isCreatingKeyReport = section === 'kehilangan' && pathSegments[2] === 'buat-laporan';
   const isRejectingReport = section === 'verifikasi' && pathSegments.length > 3;
   const isReviewingReport = section === 'verifikasi' && pathSegments.length > 2;
-  const pageTitle = isRejectingReport
-    ? 'Tolak Laporan'
-    : isReviewingReport
-      ? 'Verifikasi Laporan'
-      : pageTitles[section] || 'Dashboard Satpam';
-  const breadcrumbItems = isRejectingReport
-    ? ['Satpam', 'Tolak Laporan']
-    : isReviewingReport
-      ? ['Satpam', 'Verifikasi Laporan', 'Bukti Belum Tersedia']
-    : section === 'verifikasi'
-      ? ['Satpam', 'Report — Antrean']
-      : section === 'riwayat'
-        ? ['Satpam', 'Riwayat Laporan']
-        : ['Satpam', pageTitle];
+  const pageTitle = isCreatingKeyReport
+    ? 'Buat Laporan Kunci'
+    : isRejectingReport
+      ? 'Tolak Laporan'
+      : isReviewingReport
+        ? 'Verifikasi Laporan'
+        : pageTitles[section] || 'Dashboard Satpam';
+  const breadcrumbItems = isCreatingKeyReport
+    ? ['Satpam', 'Kehilangan', 'Buat Laporan']
+    : isRejectingReport
+      ? ['Satpam', 'Tolak Laporan']
+      : isReviewingReport
+        ? ['Satpam', 'Verifikasi Laporan', 'Bukti Belum Tersedia']
+        : section === 'verifikasi'
+          ? ['Satpam', 'Report — Antrean']
+          : section === 'riwayat'
+            ? ['Satpam', 'Riwayat Laporan']
+            : section === 'kehilangan'
+              ? ['Satpam', 'Kehilangan']
+              : ['Satpam', pageTitle];
 
   return (
     <div className="min-h-screen bg-[#FAF8F7] text-[#242424]">

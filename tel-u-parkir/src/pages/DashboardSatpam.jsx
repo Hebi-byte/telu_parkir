@@ -101,8 +101,8 @@ const emptyFilters = { violation: '', priorityOnly: false };
 function SummaryCard({ label, value, highlighted = false }) {
   return (
     <article className={`rounded-2xl border border-[#EDE4E2] p-4 ${highlighted ? 'bg-[#FCE8E8]' : 'bg-white'}`}>
-      <p className="text-xs text-[#8A7774]">{label}</p>
-      <p className={`mt-1 text-2xl font-extrabold ${highlighted ? 'text-[#BE1E2D]' : 'text-[#242424]'}`}>
+      <p className="text-sm text-[#8A7774]">{label}</p>
+      <p className={`mt-1 text-3xl font-extrabold ${highlighted ? 'text-[#BE1E2D]' : 'text-[#242424]'}`}>
         {value}
       </p>
     </article>
@@ -206,17 +206,17 @@ export default function DashboardSatpam() {
   return (
     <div>
       <section className="mb-5">
-        <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#BE1E2D]">
+        <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#BE1E2D]">
           Ringkasan Operasional • 20 Mar 2025 • Data Contoh
         </p>
-        <h1 className="mt-1 text-xl font-extrabold tracking-tight sm:text-2xl">
+        <h1 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">
           Selamat bertugas, Budi Santoso
         </h1>
-        <p className="mt-1 text-xs text-[#8A7774]">
+        <p className="mt-1 text-sm text-[#8A7774]">
           ID SPM-0142 <span className="mx-1">•</span> Unit Logistik &amp; Keamanan Telkom University
         </p>
-        <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#8A7774]">
-          <StatusBadge type="warning" className="px-2 py-0.5 text-[10px]">Shift Pagi</StatusBadge>
+        <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#8A7774]">
+          <StatusBadge type="warning" className="px-2 py-0.5 text-xs">Shift Pagi</StatusBadge>
           <span>Pos Gerbang 1</span>
           <span className="text-[#8A7774]/50">•</span>
           <span>07:00 – 15:00</span>
@@ -297,7 +297,7 @@ export default function DashboardSatpam() {
               setCurrentPage(1);
             }}
             aria-pressed={statusFilter === tab.id}
-            className={`shrink-0 rounded-lg px-3 py-2 text-[11px] font-bold transition-colors ${
+            className={`shrink-0 rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
               statusFilter === tab.id
                 ? 'bg-[#BE1E2D] text-white'
                 : 'bg-white text-[#554a48] hover:bg-[#F5F2F0]'
@@ -312,13 +312,13 @@ export default function DashboardSatpam() {
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <h2 className="text-base font-extrabold tracking-tight">Antrean Pelanggaran</h2>
-            <StatusBadge type="warning" className="px-2 py-0.5 text-[10px]">
+            <StatusBadge type="warning" className="px-2 py-0.5 text-xs">
               {statusCounts.pending} Menunggu
             </StatusBadge>
           </div>
           <Link
             to="/satpam/verifikasi"
-            className="rounded-lg border border-[#EDE4E2] bg-white px-3 py-2 text-[11px] font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]"
+            className="rounded-lg border border-[#EDE4E2] bg-white px-3 py-2 text-xs font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]"
           >
             Lihat Semua
           </Link>
@@ -335,22 +335,22 @@ export default function DashboardSatpam() {
               <div className="flex h-[76px] items-center justify-center rounded-xl bg-[#F1EFEE] text-center text-[#8A7774]">
                 <div>
                   <ImageOff className="mx-auto h-5 w-5" />
-                  <span className="mt-1 block max-w-16 text-[9px] leading-3">Foto bukti belum tersedia</span>
+                  <span className="mt-1 block max-w-16 text-xs leading-4">Foto bukti belum tersedia</span>
                 </div>
               </div>
 
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="text-sm font-extrabold tracking-tight">{report.plate}</h3>
-                  <StatusBadge type={statusTypes[report.status]} className="px-2 py-0.5 text-[9px]">
+                  <h3 className="text-base font-extrabold tracking-tight">{report.plate}</h3>
+                  <StatusBadge type={statusTypes[report.status]} className="px-2 py-0.5 text-xs">
                     {report.priority && report.status === 'pending' ? 'Prioritas' : statusLabels[report.status]}
                   </StatusBadge>
                 </div>
-                <p className="mt-0.5 text-xs font-semibold">{report.violation}</p>
-                <p className="mt-1 truncate text-[10px] text-[#8A7774]">
+                <p className="mt-0.5 text-sm font-semibold">{report.violation}</p>
+                <p className="mt-1 truncate text-xs text-[#8A7774]">
                   {report.location} <span className="mx-1">•</span> {report.reportTime}
                 </p>
-                <p className="mt-1 truncate text-[10px] text-[#8A7774]">
+                <p className="mt-1 truncate text-xs text-[#8A7774]">
                   {report.reporter} <span className="mx-1">•</span> {report.vehicle}
                   <span className="mx-1">•</span> Poin {report.currentPoints}
                   {report.status === 'valid' && report.pointsApplied
@@ -360,7 +360,7 @@ export default function DashboardSatpam() {
               </div>
 
               <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-stretch">
-                <StatusBadge type="warning" className="self-end px-2 py-0.5 text-[9px]">
+                <StatusBadge type="warning" className="self-end px-2 py-0.5 text-xs">
                   +{report.potentialPoints} Potensial
                 </StatusBadge>
                 {report.status === 'pending' ? (
@@ -369,7 +369,7 @@ export default function DashboardSatpam() {
                       to={`/satpam/verifikasi/${verificationReport.id}`}
                       state={{ report: verificationReport }}
                       onClick={() => ensureStoredReport(verificationReport)}
-                      className="rounded-lg bg-[#BE1E2D] px-3 py-2 text-center text-[10px] font-bold text-white transition-colors hover:bg-[#A51020]"
+                      className="rounded-lg bg-[#BE1E2D] px-3 py-2 text-center text-xs font-bold text-white transition-colors hover:bg-[#A51020]"
                     >
                       Tinjau &amp; Verifikasi
                     </Link>
@@ -377,13 +377,13 @@ export default function DashboardSatpam() {
                       to={`/satpam/verifikasi/${verificationReport.id}/tolak`}
                       state={{ report: verificationReport, from: '/satpam/dashboard' }}
                       onClick={() => ensureStoredReport(verificationReport)}
-                      className="rounded-lg border border-[#EDE4E2] bg-white px-3 py-1.5 text-[10px] font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]"
+                      className="inline-flex min-h-9 flex-1 items-center justify-center rounded-lg border border-[#EDE4E2] bg-white px-3 py-1.5 text-center text-xs font-semibold text-[#BE1E2D] hover:border-[#BE1E2D] sm:w-full sm:flex-none"
                     >
-                      Alasan Tolak
+                      Tolak
                     </Link>
                   </>
                 ) : (
-                  <p className="text-right text-[10px] text-[#8A7774]">
+                  <p className="text-right text-xs text-[#8A7774]">
                     {report.status === 'rejected' && report.rejectionReason
                       ? `Alasan: ${report.rejectionReason}`
                       : statusLabels[report.status]}
@@ -397,7 +397,7 @@ export default function DashboardSatpam() {
           {pageReports.length === 0 && (
             <div className="rounded-2xl border border-dashed border-[#EDE4E2] bg-white px-6 py-12 text-center">
               <Search className="mx-auto h-6 w-6 text-[#8A7774]" />
-              <h3 className="mt-3 text-sm font-bold">Laporan tidak ditemukan</h3>
+              <h3 className="mt-3 text-base font-bold">Laporan tidak ditemukan</h3>
               <p className="mt-1 text-xs text-[#8A7774]">
                 Coba ubah kata pencarian atau filter yang digunakan.
               </p>
@@ -420,7 +420,7 @@ export default function DashboardSatpam() {
         </div>
 
         {visibleReports.length > 0 && (
-          <div className="mt-3 flex flex-col items-center justify-between gap-2 text-[10px] text-[#8A7774] sm:flex-row">
+          <div className="mt-3 flex flex-col items-center justify-between gap-2 text-xs text-[#8A7774] sm:flex-row">
             <p>
               Menampilkan {Math.min(pageSize, visibleReports.length - (activePage - 1) * pageSize)} dari {visibleReports.length} laporan
               {statusFilter === 'pending' ? ' menunggu' : ''}
@@ -470,7 +470,7 @@ export default function DashboardSatpam() {
           >
             <div className="mb-5 flex items-start justify-between">
               <div>
-                <h2 id="filter-title" className="text-base font-extrabold">Filter Laporan</h2>
+                <h2 id="filter-title" className="text-xl font-extrabold">Filter Laporan</h2>
                 <p className="mt-1 text-xs text-[#8A7774]">Persempit antrean berdasarkan jenis dan prioritas.</p>
               </div>
               <button type="button" onClick={() => setFilterOpen(false)} aria-label="Tutup filter">

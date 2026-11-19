@@ -26,7 +26,7 @@ const checksToComplete = [
 
 function InfoRow({ label, children }) {
   return (
-    <div className="grid grid-cols-[96px_minmax(0,1fr)] gap-3 text-[13px] leading-6 sm:grid-cols-[132px_minmax(0,1fr)]">
+    <div className="grid grid-cols-[96px_minmax(0,1fr)] gap-3 text-sm leading-6 sm:grid-cols-[132px_minmax(0,1fr)]">
       <dt className="text-[#8A7774]">{label}</dt>
       <dd className="min-w-0 font-medium text-[#242424]">{children}</dd>
     </div>
@@ -109,7 +109,7 @@ export default function VerifikasiLaporan() {
   if (!report) {
     return (
       <section className="rounded-2xl border border-[#EDE4E2] bg-white p-8">
-        <h1 className="text-xl font-bold">Laporan tidak ditemukan</h1>
+        <h1 className="text-2xl font-bold">Laporan tidak ditemukan</h1>
         <p className="mt-2 text-sm text-[#8A7774]">ID laporan {currentReportId} tidak tersedia dalam data laporan.</p>
         <Link to="/satpam/verifikasi" className="mt-4 inline-flex text-sm font-semibold text-[#BE1E2D] hover:underline">
           Kembali ke Antrean Laporan
@@ -122,13 +122,13 @@ export default function VerifikasiLaporan() {
     <div>
       <Link
         to="/satpam/verifikasi"
-        className="mb-5 inline-flex items-center gap-2 text-[13px] font-semibold text-[#BE1E2D] hover:underline"
+        className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-[#BE1E2D] hover:underline"
       >
         <ArrowLeft className="h-4 w-4" /> Kembali ke Antrean Laporan
       </Link>
 
       <header className="mb-6">
-        <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#BE1E2D]">
+        <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#BE1E2D]">
           Panel Satpam <span className="mx-1">•</span> Pos Gerbang 1
           <span className="mx-1">•</span> #{currentReportId}
         </p>
@@ -161,7 +161,7 @@ export default function VerifikasiLaporan() {
           <div className="border-t border-[#EDE4E2] pt-5">
             <div className="flex items-center justify-between gap-2">
               <h2 className="text-base font-bold">Ringkasan Laporan</h2>
-              <StatusBadge type={statusType} className="px-2.5 py-1 text-[11px]">{statusLabel}</StatusBadge>
+              <StatusBadge type={statusType} className="px-2.5 py-1 text-xs">{statusLabel}</StatusBadge>
             </div>
             <h3 className="mt-3 text-lg font-extrabold">{report.plate}</h3>
             <dl className="mt-3 space-y-1">
@@ -183,7 +183,7 @@ export default function VerifikasiLaporan() {
           <div className="border-t border-[#EDE4E2] pt-5">
             <div className="flex items-center justify-between gap-2">
               <h2 className="text-base font-bold">Data Pemilik Kendaraan</h2>
-              <StatusBadge type="success" className="px-2.5 py-1 text-[11px]">Terdaftar</StatusBadge>
+              <StatusBadge type="success" className="px-2.5 py-1 text-xs">Terdaftar</StatusBadge>
             </div>
             <h3 className="mt-3 text-base font-bold">{report.owner}</h3>
             <p className="mt-1.5 text-xs text-[#8A7774]">{report.nim} <span className="mx-1">•</span> {report.studyProgram}</p>
@@ -212,7 +212,7 @@ export default function VerifikasiLaporan() {
                 return (
                   <label
                     key={category.id}
-                    className={`flex cursor-pointer items-center gap-3 rounded-lg border px-3.5 py-3 text-[13px] transition-colors ${
+                    className={`flex cursor-pointer items-center gap-3 rounded-lg border px-3.5 py-3 text-sm transition-colors ${
                       isSelected
                         ? 'border-[#BE1E2D] bg-[#FCE8E8] text-[#242424]'
                         : 'border-[#EDE4E2] hover:border-[#D9A5A8]'
@@ -241,7 +241,7 @@ export default function VerifikasiLaporan() {
             </p>
             <div className="mt-4 space-y-3">
               {checksToComplete.map((item) => (
-                <label key={item.id} className={`flex items-center gap-3 text-[13px] ${decision ? 'cursor-not-allowed opacity-75' : 'cursor-pointer'}`}>
+                <label key={item.id} className={`flex items-center gap-3 text-sm ${decision ? 'cursor-not-allowed opacity-75' : 'cursor-pointer'}`}>
                   <input
                     type="checkbox"
                     checked={checks[item.id]}
@@ -329,9 +329,9 @@ export default function VerifikasiLaporan() {
                 <Link
                   to={`/satpam/verifikasi/${currentReportId}/tolak`}
                   state={{ report, from: location.pathname }}
-                  className="mt-3 flex min-h-12 w-full items-center justify-center rounded-lg border border-[#EDE4E2] bg-white px-4 py-3 text-sm font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]"
+                  className="mt-3 flex min-h-12 w-full items-center justify-center rounded-lg border border-[#EDE4E2] bg-white px-4 py-3 text-center text-sm font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]"
                 >
-                  Tolak dengan Alasan
+                  Tolak
                 </Link>
               </>
             )}

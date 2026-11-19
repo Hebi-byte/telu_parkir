@@ -12,7 +12,7 @@ import {
 const menuItems = [
   { label: 'Dashboard', to: '/satpam/dashboard', icon: LayoutDashboard, end: true },
   { label: 'Verifikasi', to: '/satpam/verifikasi', icon: ClipboardCheck },
-  { label: 'Kehilangan', to: '/satpam/kehilangan', icon: KeyRound },
+  { label: 'Kehilangan', to: '/satpam/kehilangan/buat-laporan', icon: KeyRound },
   { label: 'Profil', to: '/satpam/profil', icon: UserRound },
 ];
 
@@ -40,7 +40,7 @@ export default function Sidebar({ mobileOpen, onCloseMobile }) {
             </div>
             <div>
               <p className="text-sm font-extrabold tracking-tight">Tel-U Parkir</p>
-              <p className="text-[11px] text-[#8A7774]">Telkom University</p>
+              <p className="text-xs text-[#8A7774]">Telkom University</p>
             </div>
           </div>
           <button
@@ -91,21 +91,21 @@ export default function Sidebar({ mobileOpen, onCloseMobile }) {
               <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#BE1E2D]" />
               <div>
                 <p className="text-xs font-bold leading-tight">Tertib parkir, aman bersama.</p>
-                <p className="mt-1 text-[11px] leading-snug text-[#8A7774]">
+                <p className="mt-1 text-xs leading-snug text-[#8A7774]">
                   Unit Logistik &amp; Keamanan Telkom University
                 </p>
               </div>
             </div>
             <details className="mt-1">
-              <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-[11px] font-bold text-[#BE1E2D] hover:underline">
+              <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-xs font-bold text-[#BE1E2D] hover:underline">
                 Bantuan &amp; SOP <ArrowUpRight className="h-3.5 w-3.5" />
               </summary>
-              <p className="mt-2 text-[10px] leading-relaxed text-[#8A7774]">
+              <p className="mt-2 text-xs leading-relaxed text-[#8A7774]">
                 Untuk bantuan operasional, hubungi petugas Unit Logistik &amp; Keamanan kampus.
               </p>
             </details>
           </div>
-          <p className="px-1 text-[11px] font-medium text-[#8A7774]">
+          <p className="px-1 text-xs font-medium text-[#8A7774]">
             &copy; 2025 Tel-U Parkir
           </p>
         </div>

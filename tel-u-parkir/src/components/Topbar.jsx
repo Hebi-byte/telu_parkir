@@ -62,7 +62,7 @@ export default function Topbar({ pageTitle, breadcrumbItems, onOpenMobileSidebar
       </div>
 
       <div className="flex shrink-0 items-center gap-3 sm:gap-5">
-        <span className="hidden rounded-full bg-[#F5F2F0] px-2.5 py-1 text-[11px] font-semibold text-[#554a48] sm:inline-flex">
+        <span className="hidden rounded-full bg-[#F5F2F0] px-2.5 py-1 text-xs font-semibold text-[#554a48] sm:inline-flex">
           <span className="mr-1.5 mt-1 h-1.5 w-1.5 rounded-full bg-[#8A7774]" />
           Pos Gerbang 1
         </span>
@@ -85,13 +85,13 @@ export default function Topbar({ pageTitle, breadcrumbItems, onOpenMobileSidebar
               <div className="flex items-center justify-between border-b border-[#EDE4E2] px-4 py-3">
                 <div>
                   <h2 className="text-sm font-bold">Notifikasi</h2>
-                  <p className="text-[11px] text-[#8A7774]">{unreadCount} belum dibaca</p>
+                  <p className="text-xs text-[#8A7774]">{unreadCount} belum dibaca</p>
                 </div>
                 {unreadCount > 0 && (
                   <button
                     type="button"
                     onClick={markAllAsRead}
-                    className="text-[11px] font-semibold text-[#BE1E2D] hover:underline"
+                    className="text-xs font-semibold text-[#BE1E2D] hover:underline"
                   >
                     Tandai dibaca
                   </button>
@@ -112,8 +112,8 @@ export default function Topbar({ pageTitle, breadcrumbItems, onOpenMobileSidebar
                       <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${notification.type === 'success' ? 'text-[#087A36]' : 'text-[#BE1E2D]'}`} />
                       <div>
                         <p className="text-xs font-semibold">{notification.title}</p>
-                        <p className="mt-0.5 text-[11px] text-[#8A7774]">{notification.message}</p>
-                        <p className="mt-1 text-[10px] text-[#8A7774]/70">{notification.time}</p>
+                        <p className="mt-0.5 text-xs text-[#8A7774]">{notification.message}</p>
+                        <p className="mt-1 text-xs text-[#8A7774]/70">{notification.time}</p>
                       </div>
                     </div>
                   );
@@ -130,7 +130,7 @@ export default function Topbar({ pageTitle, breadcrumbItems, onOpenMobileSidebar
             aria-expanded={profileOpen}
             className="flex items-center gap-2 rounded-lg p-1 hover:bg-[#FAF8F7]"
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#FCE8E8] text-[10px] font-bold text-[#BE1E2D]">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#FCE8E8] text-xs font-bold text-[#BE1E2D]">
               BS
             </span>
             <span className="hidden text-xs font-semibold sm:inline">Budi Santoso</span>
@@ -140,7 +140,7 @@ export default function Topbar({ pageTitle, breadcrumbItems, onOpenMobileSidebar
             <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-[#EDE4E2] bg-white p-2 shadow-xl">
               <div className="border-b border-[#EDE4E2] px-3 py-2">
                 <p className="text-xs font-bold">Budi Santoso</p>
-                <p className="mt-0.5 text-[11px] text-[#8A7774]">ID SPM-0142 · Satpam</p>
+                <p className="mt-0.5 text-xs text-[#8A7774]">ID SPM-0142 · Satpam</p>
               </div>
               <button
                 type="button"

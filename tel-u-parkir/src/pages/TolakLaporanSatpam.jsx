@@ -20,7 +20,7 @@ const officer = {
 
 function InfoRow({ label, children }) {
   return (
-    <div className="grid grid-cols-[76px_minmax(0,1fr)] gap-3 text-xs leading-5 sm:grid-cols-[100px_minmax(0,1fr)]">
+    <div className="grid grid-cols-[76px_minmax(0,1fr)] gap-3 text-sm leading-5 sm:grid-cols-[100px_minmax(0,1fr)]">
       <dt className="text-[#8A7774]">{label}</dt>
       <dd className="min-w-0 font-medium text-[#242424]">{children}</dd>
     </div>
@@ -76,7 +76,7 @@ export default function TolakLaporanSatpam() {
   if (!report) {
     return (
       <section className="rounded-2xl border border-[#EDE4E2] bg-white p-8">
-        <h1 className="text-xl font-bold">Laporan tidak ditemukan</h1>
+        <h1 className="text-2xl font-bold">Laporan tidak ditemukan</h1>
         <p className="mt-2 text-sm text-[#8A7774]">ID laporan {reportId} tidak tersedia dalam data laporan.</p>
         <Link to={returnTo} className="mt-4 inline-flex text-sm font-semibold text-[#BE1E2D] hover:underline">
           Kembali ke Laporan
@@ -104,10 +104,10 @@ export default function TolakLaporanSatpam() {
       </Link>
 
       <header className="mb-5">
-        <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#BE1E2D]">
+        <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#BE1E2D]">
           Panel Satpam <span className="mx-1">•</span> Pos Gerbang 1
         </p>
-        <h1 className="mt-1 text-2xl font-extrabold tracking-tight">Tolak Laporan</h1>
+        <h1 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">Tolak Laporan</h1>
         <p className="mt-1 text-sm text-[#8A7774]">
           Catat alasan dan penjelasan hasil peninjauan sebelum mengirim keputusan.
         </p>
@@ -131,10 +131,10 @@ export default function TolakLaporanSatpam() {
       <div className="grid items-start gap-4 lg:grid-cols-[0.85fr_1.15fr]">
         <div className="space-y-3.5">
           <section className="rounded-xl border border-[#EDE4E2] bg-white p-4 sm:p-5">
-            <h2 className="text-sm font-bold">Ringkasan Laporan</h2>
+            <h2 className="text-base font-bold">Ringkasan Laporan</h2>
             <div className="mt-3 flex items-center justify-between gap-3">
               <h3 className="text-base font-extrabold">{report.plate}</h3>
-              <StatusBadge type={statusType} className="px-2.5 py-1 text-[10px]">{statusLabel}</StatusBadge>
+              <StatusBadge type={statusType} className="px-2.5 py-1 text-xs">{statusLabel}</StatusBadge>
             </div>
             <dl className="mt-3 space-y-1.5">
               <InfoRow label="ID laporan">#{report.id}</InfoRow>
@@ -148,17 +148,17 @@ export default function TolakLaporanSatpam() {
               <div role="img" aria-label="Foto bukti belum tersedia" className="mt-3 flex h-28 items-center justify-center rounded-lg bg-[#F1EFEE] text-[#8A7774]">
                 <div className="text-center">
                   <ImageOff className="mx-auto h-5 w-5" />
-                  <p className="mt-1.5 text-[10px]">Pratinjau foto belum tersedia</p>
+                  <p className="mt-1.5 text-xs">Pratinjau foto belum tersedia</p>
                 </div>
               </div>
             )}
-            <p className="mt-3 text-[10px] leading-relaxed text-[#8A7774]">
+            <p className="mt-3 text-xs leading-relaxed text-[#8A7774]">
               Pemilik: {report.owner} <span className="mx-1">•</span> {report.vehicle}
               <span className="mx-1">•</span> Poin saat ini {report.currentPoints}; potensi +{report.potentialPoints} belum diterapkan.
             </p>
           </section>
 
-          <div className="flex gap-2.5 rounded-lg bg-[#FCE8E8] px-3.5 py-3 text-[10px] leading-relaxed text-[#8A7774]">
+          <div className="flex gap-2.5 rounded-lg bg-[#FCE8E8] px-3.5 py-3 text-xs leading-relaxed text-[#8A7774]">
             <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#BE1E2D]" />
             <p>
               Laporan ditolak menambah 0 poin dan tidak memengaruhi leaderboard. Poin pemilik tetap {report.currentPoints}.
@@ -166,15 +166,15 @@ export default function TolakLaporanSatpam() {
           </div>
 
           <section className="rounded-xl border border-[#EDE4E2] bg-white p-4 sm:p-5">
-            <h2 className="text-sm font-bold">Pencatatan Keputusan</h2>
-            <dl className="mt-3 space-y-1.5 text-[10px] leading-relaxed text-[#8A7774]">
+            <h2 className="text-base font-bold">Pencatatan Keputusan</h2>
+            <dl className="mt-3 space-y-1.5 text-xs leading-relaxed text-[#8A7774]">
               <InfoRow label="Petugas">{officer.name} • {officer.id}</InfoRow>
               <InfoRow label="Pos & shift">{officer.post} • Shift {officer.shift}</InfoRow>
               {report.decisionAt && (
                 <InfoRow label="Waktu keputusan">{new Date(report.decisionAt).toLocaleString('id-ID')}</InfoRow>
               )}
             </dl>
-            <p className="mt-3 text-[10px] leading-relaxed text-[#8A7774]">
+            <p className="mt-3 text-xs leading-relaxed text-[#8A7774]">
               Setelah konfirmasi dikirim, petugas, alasan, penjelasan, dan waktu keputusan dicatat dalam riwayat.
             </p>
           </section>
@@ -192,11 +192,11 @@ export default function TolakLaporanSatpam() {
                   }}
                   aria-describedby={reasonError ? 'reason-error' : undefined}
                 >
-                  <legend className="text-sm font-bold">Alasan Penolakan <span className="text-[#BE1E2D]">*</span></legend>
-                  <p className="mt-2 text-[10px] text-[#8A7774]">Wajib pilih satu alasan yang sesuai hasil peninjauan.</p>
+                  <legend className="text-base font-bold">Alasan Penolakan <span className="text-[#BE1E2D]">*</span></legend>
+                  <p className="mt-2 text-xs text-[#8A7774]">Wajib pilih satu alasan yang sesuai hasil peninjauan.</p>
                   <div className="mt-3 space-y-2.5">
                     {rejectionReasons.map((reason) => (
-                      <label key={reason.value} className="flex cursor-pointer items-center gap-2.5 text-[11px]">
+                      <label key={reason.value} className="flex cursor-pointer items-center gap-2.5 text-sm">
                         <input
                           type="radio"
                           name="rejection-reason"
@@ -212,15 +212,15 @@ export default function TolakLaporanSatpam() {
                       </label>
                     ))}
                   </div>
-                  {reasonError && <p id="reason-error" role="alert" className="mt-2 text-[10px] text-[#BE1E2D]">{reasonError}</p>}
+                  {reasonError && <p id="reason-error" role="alert" className="mt-2 text-xs text-[#BE1E2D]">{reasonError}</p>}
                 </fieldset>
               </section>
 
               <section className="rounded-xl border border-[#EDE4E2] bg-white p-4 sm:p-5">
-                <label htmlFor="rejection-explanation" className="text-sm font-bold">
+                <label htmlFor="rejection-explanation" className="text-base font-bold">
                   Penjelasan Penolakan
                 </label>
-                <label htmlFor="rejection-explanation" className="mt-2 block text-[10px] font-semibold">
+                <label htmlFor="rejection-explanation" className="mt-2 block text-xs font-semibold">
                   Penjelasan <span className="text-[#BE1E2D]">*</span>
                 </label>
                 <textarea
@@ -237,35 +237,35 @@ export default function TolakLaporanSatpam() {
                   placeholder="Jelaskan temuan dan alasan penolakan secara spesifik..."
                   aria-invalid={Boolean(explanationError)}
                   aria-describedby={explanationError ? 'explanation-error explanation-help' : 'explanation-help'}
-                  className="mt-2 w-full resize-y rounded-lg border border-[#EDE4E2] px-3 py-2.5 text-[11px] leading-relaxed outline-none placeholder:text-[#8A7774]/70 focus:border-[#BE1E2D]"
+                  className="mt-2 w-full resize-y rounded-lg border border-[#EDE4E2] px-3 py-2.5 text-sm leading-relaxed outline-none placeholder:text-[#8A7774]/70 focus:border-[#BE1E2D]"
                 />
-                {explanationError && <p id="explanation-error" role="alert" className="mt-1 text-[10px] text-[#BE1E2D]">{explanationError}</p>}
-                <p id="explanation-help" className="mt-2 text-[10px] leading-relaxed text-[#8A7774]">
+                {explanationError && <p id="explanation-error" role="alert" className="mt-1 text-xs text-[#BE1E2D]">{explanationError}</p>}
+                <p id="explanation-help" className="mt-2 text-xs leading-relaxed text-[#8A7774]">
                   Wajib diisi untuk semua pilihan alasan, termasuk Lainnya. Jangan cantumkan data pribadi yang tidak relevan.
                 </p>
               </section>
 
               <section className="rounded-xl border border-[#EDE4E2] bg-white p-4 sm:p-5">
-                <h2 className="text-sm font-bold">Konfirmasi Keputusan</h2>
+                <h2 className="text-base font-bold">Konfirmasi Keputusan</h2>
                 <button
                   type="button"
                   disabled={!canSubmit}
                   onClick={() => setConfirmationOpen(true)}
-                  className="mt-3 min-h-10 rounded-lg bg-[#BE1E2D] px-3.5 text-[11px] font-bold text-white transition-colors hover:bg-[#A51020] disabled:cursor-not-allowed disabled:bg-[#E5E0DF] disabled:text-[#8A7774]"
+                  className="mt-3 min-h-10 rounded-lg bg-[#BE1E2D] px-3.5 text-xs font-bold text-white transition-colors hover:bg-[#A51020] disabled:cursor-not-allowed disabled:bg-[#E5E0DF] disabled:text-[#8A7774]"
                 >
                   Konfirmasi Penolakan
                 </button>
-                <p className="mt-2 text-[10px] leading-relaxed text-[#8A7774]">
+                <p className="mt-2 text-xs leading-relaxed text-[#8A7774]">
                   Pilih alasan dan isi penjelasan terlebih dahulu untuk mengaktifkan konfirmasi.
                 </p>
-                <Link to={returnTo} className="mt-3 inline-flex min-h-9 items-center rounded-lg border border-[#EDE4E2] px-3 text-[10px] font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]">
+                <Link to={returnTo} className="mt-3 inline-flex min-h-9 items-center rounded-lg border border-[#EDE4E2] px-3 text-xs font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]">
                   Batal &amp; Kembali ke Laporan
                 </Link>
               </section>
             </>
           ) : (
             <section className="rounded-xl border border-[#EDE4E2] bg-white p-4 sm:p-5">
-              <h2 className="text-sm font-bold">Keterangan Keputusan</h2>
+              <h2 className="text-base font-bold">Keterangan Keputusan</h2>
               {report.status === 'rejected' ? (
                 <div className="mt-3 space-y-2 text-xs leading-relaxed">
                   <p><span className="font-semibold">Alasan:</span> {report.rejectionReason || 'Tidak tersedia.'}</p>
@@ -276,7 +276,7 @@ export default function TolakLaporanSatpam() {
                   Laporan telah terverifikasi. Keputusan penolakan tidak dapat dikirim.
                 </p>
               )}
-              <Link to={returnTo} className="mt-4 inline-flex min-h-9 items-center rounded-lg border border-[#EDE4E2] px-3 text-[10px] font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]">
+              <Link to={returnTo} className="mt-4 inline-flex min-h-9 items-center rounded-lg border border-[#EDE4E2] px-3 text-xs font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]">
                 Kembali ke Laporan
               </Link>
             </section>
@@ -291,8 +291,8 @@ export default function TolakLaporanSatpam() {
           <section role="dialog" aria-modal="true" aria-labelledby="rejection-confirm-title" className="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl sm:p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#BE1E2D]">Konfirmasi Keputusan</p>
-                <h2 id="rejection-confirm-title" className="mt-1 text-lg font-extrabold">Konfirmasi Penolakan Laporan?</h2>
+                <p className="text-xs font-extrabold uppercase tracking-wider text-[#BE1E2D]">Konfirmasi Keputusan</p>
+                <h2 id="rejection-confirm-title" className="mt-1 text-xl font-extrabold">Konfirmasi Penolakan Laporan?</h2>
               </div>
               <button type="button" onClick={() => setConfirmationOpen(false)} aria-label="Tutup konfirmasi" className="rounded-lg p-1 text-[#8A7774] hover:bg-[#FAF8F7]">
                 <X className="h-5 w-5" />

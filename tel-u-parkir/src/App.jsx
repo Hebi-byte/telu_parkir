@@ -1,7 +1,9 @@
 import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import SatpamLayout from './layouts/SatpamLayout';
 import AntreanLaporanSatpam from './pages/AntreanLaporanSatpam';
+import BuatLaporanKunciSatpam from './pages/BuatLaporanKunciSatpam';
 import DashboardSatpam from './pages/DashboardSatpam';
+import KehilanganSatpam from './pages/KehilanganSatpam';
 import RiwayatLaporanSatpam from './pages/RiwayatLaporanSatpam';
 import TolakLaporanSatpam from './pages/TolakLaporanSatpam';
 import VerifikasiLaporan from './pages/VerifikasiLaporan';
@@ -18,7 +20,7 @@ function ComingSoonPage() {
 
   return (
     <section className="rounded-2xl border border-[#EDE4E2] bg-white p-8">
-      <h1 className="text-xl font-bold">{title}</h1>
+      <h1 className="text-2xl font-bold sm:text-3xl">{title}</h1>
       <p className="mt-2 text-sm text-[#8A7774]">
         Halaman ini belum tersedia dalam lingkup Portal Satpam saat ini.
       </p>
@@ -37,6 +39,8 @@ function App() {
           <Route path="verifikasi" element={<AntreanLaporanSatpam />} />
           <Route path="verifikasi/:reportId" element={<VerifikasiLaporan />} />
           <Route path="verifikasi/:reportId/tolak" element={<TolakLaporanSatpam />} />
+          <Route path="kehilangan" element={<KehilanganSatpam />} />
+          <Route path="kehilangan/buat-laporan" element={<BuatLaporanKunciSatpam />} />
           <Route path="riwayat" element={<RiwayatLaporanSatpam />} />
           <Route path=":section" element={<ComingSoonPage />} />
           <Route path=":section/:itemId" element={<ComingSoonPage />} />

@@ -119,7 +119,7 @@ export default function RiwayatLaporanSatpam() {
     <div>
       <Link
         to="/satpam/verifikasi"
-        className="mb-4 inline-flex items-center gap-2 text-[13px] font-semibold text-[#BE1E2D] hover:underline"
+        className="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-[#BE1E2D] hover:underline"
       >
         <ArrowLeft className="h-4 w-4" /> Kembali ke Antrean Laporan
       </Link>
@@ -127,7 +127,7 @@ export default function RiwayatLaporanSatpam() {
         <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#BE1E2D]">
           Riwayat Operasional
         </p>
-        <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Riwayat Laporan</h1>
+        <h1 className="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">Riwayat Laporan</h1>
         <p className="mt-2 text-sm text-[#8A7774]">
           Seluruh dokumentasi laporan pelanggaran parkir beserta status dan keputusan verifikasi petugas.
         </p>
@@ -180,7 +180,7 @@ export default function RiwayatLaporanSatpam() {
 
         {pageReports.length > 0 ? (
           <>
-            <div className="mb-2 hidden rounded-lg px-4 py-2 text-[11px] font-semibold uppercase tracking-wide text-[#8A7774] lg:grid lg:grid-cols-[140px_minmax(0,1.3fr)_minmax(0,1fr)_120px_72px] lg:gap-4">
+            <div className="mb-2 hidden rounded-lg px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[#8A7774] lg:grid lg:grid-cols-[140px_minmax(0,1.3fr)_minmax(0,1fr)_120px_72px] lg:gap-4">
               <span>ID Laporan</span>
               <span>Kendaraan &amp; Pelanggaran</span>
               <span>Lokasi &amp; Waktu</span>
@@ -196,16 +196,16 @@ export default function RiwayatLaporanSatpam() {
                   <div className="flex items-center justify-between gap-3 sm:col-span-2 lg:col-span-1">
                     <div className="min-w-0">
                       <p className="text-xs font-bold text-[#554a48]">#{report.id}</p>
-                      <StatusBadge type={statusTypes[report.status]} className="mt-2 px-2.5 py-1 text-[10px]">
+                      <StatusBadge type={statusTypes[report.status]} className="mt-2 px-2.5 py-1 text-xs">
                         {statusLabels[report.status]}
                       </StatusBadge>
                     </div>
-                    <p className="text-sm font-extrabold lg:hidden">{report.plate}</p>
+                    <p className="text-base font-extrabold lg:hidden">{report.plate}</p>
                   </div>
 
                   <div className="min-w-0">
-                    <p className="hidden text-sm font-extrabold lg:block">{report.plate}</p>
-                    <p className="text-xs font-semibold leading-relaxed text-[#242424]">{report.violation}</p>
+                    <p className="hidden text-base font-extrabold lg:block">{report.plate}</p>
+                    <p className="text-sm font-semibold leading-relaxed text-[#242424]">{report.violation}</p>
                   </div>
 
                   <div className="min-w-0 text-xs leading-relaxed">
@@ -214,7 +214,7 @@ export default function RiwayatLaporanSatpam() {
                   </div>
 
                   <div className="text-xs">
-                    <p className="text-[10px] text-[#8A7774] lg:hidden">Petugas</p>
+                    <p className="text-xs text-[#8A7774] lg:hidden">Petugas</p>
                     <p className="mt-0.5 font-medium">{report.handledBy}</p>
                   </div>
 
@@ -382,7 +382,7 @@ export default function RiwayatLaporanSatpam() {
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-3">
                   <h3 className="text-xl font-extrabold">{selectedReport.plate}</h3>
-                  <StatusBadge type={statusTypes[selectedReport.status]} className="px-2.5 py-1 text-[11px]">
+                  <StatusBadge type={statusTypes[selectedReport.status]} className="px-2.5 py-1 text-xs">
                     {statusLabels[selectedReport.status]}
                   </StatusBadge>
                 </div>
