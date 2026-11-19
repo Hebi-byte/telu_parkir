@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Footer({ footerInfo }) {
   const leftText = footerInfo?.kiri || 'Tel-U Parkir • Unit Logistik & Keamanan Telkom University';
   const rightText = footerInfo?.kanan || 'Kampus Purwokerto';

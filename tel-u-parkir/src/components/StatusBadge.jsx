@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function StatusBadge({ type = 'success', children, showDot = true, icon: Icon, className = '' }) {
   const styles = {
     success: 'bg-[#D9FBE4] text-[#087A36] border border-[#c4f2d1]',

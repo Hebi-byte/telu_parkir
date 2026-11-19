@@ -1,91 +1,47 @@
-import { useState } from 'react';
-import MahasiswaLayout from './layouts/MahasiswaLayout';
-import DashboardMahasiswa from './pages/DashboardMahasiswa';
-import LeaderboardMahasiswa from './pages/LeaderboardMahasiswa';
-import KehilanganMahasiswa from './pages/KehilanganMahasiswa';
-import LaporParkirMahasiswa from './pages/LaporParkirMahasiswa';
-import { dashboardData } from './data/dashboardData';
+import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
+import SatpamLayout from './layouts/SatpamLayout';
+import AntreanLaporanSatpam from './pages/AntreanLaporanSatpam';
+import DashboardSatpam from './pages/DashboardSatpam';
+import RiwayatLaporanSatpam from './pages/RiwayatLaporanSatpam';
+import VerifikasiLaporan from './pages/VerifikasiLaporan';
 
-const initialParkingReports = [
-  {
-    id: 'LPR-001',
-    plate: 'D 3319 ZB',
-    location: 'Jalur Pedestrian',
-    time: 'Hari ini, 08:15 WIB',
-    createdAt: '2026-11-17T08:15:00+07:00',
-    status: 'Menunggu',
-  },
-  {
-    id: 'LPR-002',
-    plate: 'D 4521 TLU',
-    location: 'Parkiran FIT',
-    time: 'Kemarin, 14:32 WIB',
-    createdAt: '2026-11-16T14:32:00+07:00',
-    status: 'Dalam Peninjauan',
-  },
-  {
-    id: 'LPR-003',
-    plate: 'F 1042 ABC',
-    location: 'Parkiran Motor GKU / Tokong Nanas',
-    time: '12 Nov 2026, 10:20 WIB',
-    createdAt: '2026-11-12T10:20:00+07:00',
-    status: 'Terverifikasi',
-  },
-];
-
-function App() {
-  const [activeMenu, setActiveMenu] = useState('Dashboard');
-  const [data] = useState(dashboardData);
-  const [parkingReports, setParkingReports] = useState(initialParkingReports);
-
-  const handleSelectMenu = (menuId) => {
-    setActiveMenu(menuId);
-  };
-
-  const handleSubmitParkingReport = (report) => {
-    setParkingReports((currentReports) => [report, ...currentReports]);
-  };
+function ComingSoonPage() {
+  const { section } = useParams();
+  const title = {
+    verifikasi: 'Verifikasi',
+    kehilangan: 'Kehilangan',
+    profil: 'Profil',
+    riwayat: 'Riwayat Pelanggaran & Poin',
+    koreksi: 'Ajukan Koreksi ke Admin',
+  }[section] || 'Halaman';
 
   return (
-    <MahasiswaLayout
-      mahasiswa={data.mahasiswa}
-      notifikasi={data.notifikasi}
-      activeMenu={activeMenu}
-      onSelectMenu={handleSelectMenu}
-      footerInfo={data.footerInfo}
-    >
-      {activeMenu === 'Dashboard' ? (
-        <DashboardMahasiswa
-          data={data}
-          onNavigateMenu={handleSelectMenu}
-        />
-      ) : activeMenu === 'Leaderboard' ? (
-        <LeaderboardMahasiswa mahasiswa={data.mahasiswa} poin={data.akumulasiPoin.poin} />
-      ) : activeMenu === 'Kehilangan' ? (
-        <KehilanganMahasiswa />
-      ) : activeMenu === 'Lapor Parkir' ? (
-        <LaporParkirMahasiswa
-          reports={parkingReports}
-          onSubmitReport={handleSubmitParkingReport}
-        />
-      ) : (
-        <div className="bg-white rounded-2xl p-10 border border-[#EDE4E2] text-center space-y-4">
-          <div className="w-16 h-16 bg-[#FCE8E8] text-[#BE1E2D] rounded-full flex items-center justify-center mx-auto text-xl font-bold">
-            {activeMenu.charAt(0)}
-          </div>
-          <h2 className="text-xl font-bold text-[#242424]">{activeMenu}</h2>
-          <p className="text-xs text-[#8A7774] max-w-md mx-auto">
-            Halaman {activeMenu} saat ini berada dalam lingkup modul Mahasiswa Tel-U Parkir.
-          </p>
-          <button
-            onClick={() => setActiveMenu('Dashboard')}
-            className="px-5 py-2.5 rounded-xl bg-[#BE1E2D] hover:bg-[#A51020] text-white text-xs font-bold transition-colors cursor-pointer"
-          >
-            Kembali ke Dashboard
-          </button>
-        </div>
-      )}
-    </MahasiswaLayout>
+    <section className="rounded-2xl border border-[#EDE4E2] bg-white p-8">
+      <h1 className="text-xl font-bold">{title}</h1>
+      <p className="mt-2 text-sm text-[#8A7774]">
+        Halaman ini belum tersedia dalam lingkup Portal Satpam saat ini.
+      </p>
+    </section>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/satpam/dashboard" replace />} />
+        <Route path="/satpam" element={<SatpamLayout />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<DashboardSatpam />} />
+          <Route path="verifikasi" element={<AntreanLaporanSatpam />} />
+          <Route path="verifikasi/:reportId" element={<VerifikasiLaporan />} />
+          <Route path="riwayat" element={<RiwayatLaporanSatpam />} />
+          <Route path=":section" element={<ComingSoonPage />} />
+          <Route path=":section/:itemId" element={<ComingSoonPage />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/satpam/dashboard" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
