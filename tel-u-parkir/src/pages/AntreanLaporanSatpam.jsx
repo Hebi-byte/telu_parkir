@@ -1,8 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  AlertCircle,
-  CheckCircle2,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -13,7 +11,7 @@ import {
   X,
 } from 'lucide-react';
 import StatusBadge from '../components/StatusBadge';
-import { loadReports, updateStoredReport } from '../data/reportData';
+import { loadReports } from '../data/reportData';
 
 const today = '2025-03-20';
 const pageSize = 3;
@@ -42,18 +40,13 @@ function SummaryCard({ label, value, highlighted = false }) {
 }
 
 export default function AntreanLaporanSatpam() {
-  const [reports, setReports] = useState(() => loadReports());
+  const [reports] = useState(() => loadReports());
   const [search, setSearch] = useState('');
   const [dateFilter, setDateFilter] = useState('today');
   const [filters, setFilters] = useState(defaultFilters);
   const [draftFilters, setDraftFilters] = useState({ ...defaultFilters, dateRange: 'today' });
   const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rejectionReport, setRejectionReport] = useState(null);
-  const [rejectionReason, setRejectionReason] = useState('');
-  const [rejectionError, setRejectionError] = useState('');
-  const [rejectionConfirmation, setRejectionConfirmation] = useState(false);
-  const [toast, setToast] = useState('');
 
   const dateReports = useMemo(() => reports.filter((report) => {
     if (dateFilter === 'today') return report.submittedOn === today;
@@ -91,12 +84,6 @@ export default function AntreanLaporanSatpam() {
     + Number(Boolean(filters.violation))
     + Number(dateFilter !== 'today');
 
-  useEffect(() => {
-    if (!toast) return undefined;
-    const timeoutId = window.setTimeout(() => setToast(''), 3500);
-    return () => window.clearTimeout(timeoutId);
-  }, [toast]);
-
   function openFilters() {
     setDraftFilters({ ...filters, dateRange: dateFilter });
     setFilterOpen(true);
@@ -114,41 +101,6 @@ export default function AntreanLaporanSatpam() {
     setFilters(defaultFilters);
     setDraftFilters({ ...defaultFilters, dateRange: 'today' });
     setDateFilter('today');
-    setCurrentPage(1);
-  }
-
-  function openRejection(report) {
-    setRejectionReport(report);
-    setRejectionReason('');
-    setRejectionError('');
-    setRejectionConfirmation(false);
-  }
-
-  function continueRejection() {
-    if (!rejectionReason.trim()) {
-      setRejectionError('Alasan penolakan wajib diisi.');
-      return;
-    }
-    setRejectionError('');
-    setRejectionConfirmation(true);
-  }
-
-  function confirmRejection() {
-    if (!rejectionReport || !rejectionReason.trim()) {
-      setRejectionError('Alasan penolakan wajib diisi.');
-      setRejectionConfirmation(false);
-      return;
-    }
-
-    const updatedReports = updateStoredReport(rejectionReport.id, {
-      status: 'rejected',
-      rejectionReason: rejectionReason.trim(),
-    });
-    setReports(updatedReports);
-    setToast(`Laporan ${rejectionReport.id} berhasil ditolak.`);
-    setRejectionReport(null);
-    setRejectionReason('');
-    setRejectionConfirmation(false);
     setCurrentPage(1);
   }
 
@@ -274,13 +226,13 @@ export default function AntreanLaporanSatpam() {
                     >
                       Tinjau Laporan
                     </Link>
-                    <button
-                      type="button"
-                      onClick={() => openRejection(report)}
-                      className="rounded-lg border border-[#EDE4E2] bg-white px-3 py-2 text-xs font-semibold text-[#BE1E2D] transition-colors hover:border-[#BE1E2D]"
+                    <Link
+                      to={`/satpam/verifikasi/${report.id}/tolak`}
+                      state={{ report, from: '/satpam/verifikasi' }}
+                      className="rounded-lg border border-[#EDE4E2] bg-white px-3 py-2 text-center text-xs font-semibold text-[#BE1E2D] transition-colors hover:border-[#BE1E2D]"
                     >
                       Tolak dengan alasan
-                    </button>
+                    </Link>
                   </>
                 ) : (
                   <p className="text-right text-xs text-[#8A7774]">{statusLabels[report.status]}</p>
@@ -428,80 +380,6 @@ export default function AntreanLaporanSatpam() {
         </div>
       )}
 
-      {rejectionReport && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setRejectionReport(null);
-          }}
-        >
-          <section role="dialog" aria-modal="true" aria-labelledby="reject-title" className="w-full max-w-lg rounded-2xl bg-white p-5 shadow-2xl sm:p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs font-extrabold uppercase tracking-wider text-[#BE1E2D]">Penolakan Laporan</p>
-                <h2 id="reject-title" className="mt-1 text-xl font-extrabold">Tolak Laporan</h2>
-              </div>
-              <button type="button" onClick={() => setRejectionReport(null)} aria-label="Tutup penolakan">
-                <X className="h-5 w-5 text-[#8A7774]" />
-              </button>
-            </div>
-            <p className="mt-4 text-sm text-[#8A7774]">{rejectionReport.id} <span className="mx-1">•</span> {rejectionReport.plate}</p>
-            {rejectionConfirmation ? (
-              <>
-                <div className="mt-5 flex gap-3 rounded-lg bg-[#FCE8E8] p-4 text-sm leading-relaxed text-[#8A7774]">
-                  <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-[#BE1E2D]" />
-                  <p>
-                    Konfirmasi penolakan laporan ini? Status akan berubah menjadi Ditolak dan laporan dihapus dari antrean menunggu.
-                    <span className="mt-2 block font-semibold text-[#242424]">Alasan: {rejectionReason.trim()}</span>
-                  </p>
-                </div>
-                <div className="mt-6 flex justify-end gap-3">
-                  <button type="button" onClick={() => setRejectionConfirmation(false)} className="min-h-11 rounded-lg border border-[#EDE4E2] px-4 text-sm font-semibold">
-                    Kembali
-                  </button>
-                  <button type="button" onClick={confirmRejection} className="min-h-11 rounded-lg bg-[#BE1E2D] px-4 text-sm font-bold text-white hover:bg-[#A51020]">
-                    Ya, Tolak Laporan
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <label htmlFor="rejection-reason" className="mt-5 block text-sm font-semibold">Alasan Penolakan</label>
-                <textarea
-                  id="rejection-reason"
-                  rows={4}
-                  value={rejectionReason}
-                  onChange={(event) => {
-                    setRejectionReason(event.target.value);
-                    setRejectionError('');
-                  }}
-                  placeholder="Masukkan alasan penolakan laporan..."
-                  className="mt-2 w-full resize-y rounded-lg border border-[#EDE4E2] px-3.5 py-3 text-sm leading-relaxed outline-none placeholder:text-[#8A7774]/70 focus:border-[#BE1E2D]"
-                />
-                {rejectionError && <p role="alert" className="mt-2 text-sm text-[#BE1E2D]">{rejectionError}</p>}
-                <div className="mt-6 flex justify-end gap-3">
-                  <button type="button" onClick={() => setRejectionReport(null)} className="min-h-11 rounded-lg border border-[#EDE4E2] px-4 text-sm font-semibold">
-                    Batalkan
-                  </button>
-                  <button type="button" onClick={continueRejection} className="min-h-11 rounded-lg bg-[#BE1E2D] px-4 text-sm font-bold text-white hover:bg-[#A51020]">
-                    Lanjutkan
-                  </button>
-                </div>
-              </>
-            )}
-          </section>
-        </div>
-      )}
-
-      {toast && (
-        <div role="status" className="fixed bottom-5 right-5 z-[70] flex max-w-sm items-center gap-2 rounded-xl bg-[#242424] px-4 py-3 text-sm font-medium text-white shadow-xl">
-          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#D9FBE4]" />
-          <span>{toast}</span>
-          <button type="button" onClick={() => setToast('')} aria-label="Tutup pesan" className="ml-2">
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-      )}
     </div>
   );
 }

@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  AlertCircle,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -127,19 +126,25 @@ function getVerificationReport(report, verificationReports) {
 }
 
 export default function DashboardSatpam() {
-  const [reports, setReports] = useState(initialReports);
   const [verificationReports] = useState(() => loadReports());
+  const [reports] = useState(() => initialReports.map((report) => {
+    const storedReport = verificationReports.find((item) => item.plate === report.plate);
+    return storedReport
+      ? {
+        ...report,
+        status: storedReport.status,
+        rejectionReason: storedReport.rejectionReason,
+        pointsApplied: storedReport.pointsApplied ?? report.pointsApplied,
+      }
+      : report;
+  }));
   const [dateFilter, setDateFilter] = useState('today');
   const [statusFilter, setStatusFilter] = useState('pending');
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState(emptyFilters);
   const [draftFilters, setDraftFilters] = useState(emptyFilters);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [rejectionReport, setRejectionReport] = useState(null);
-  const [rejectionReason, setRejectionReason] = useState('');
-  const [rejectionError, setRejectionError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [toast, setToast] = useState('');
   const pageSize = 3;
 
   const dateReports = useMemo(() => reports.filter((report) => {
@@ -179,42 +184,9 @@ export default function DashboardSatpam() {
   const pageReports = visibleReports.slice((activePage - 1) * pageSize, activePage * pageSize);
   const activeFilterCount = Number(Boolean(filters.violation)) + Number(filters.priorityOnly);
 
-  useEffect(() => {
-    if (!toast) return undefined;
-    const timeoutId = window.setTimeout(() => setToast(''), 3500);
-    return () => window.clearTimeout(timeoutId);
-  }, [toast]);
-
   function openFilters() {
     setDraftFilters(filters);
     setFilterOpen(true);
-  }
-
-  function openRejection(report) {
-    setRejectionReport(report);
-    setRejectionReason('');
-    setRejectionError('');
-  }
-
-  function updateReportStatus(reportId, status, extra = {}) {
-    setReports((currentReports) => currentReports.map((report) => (
-      report.id === reportId ? { ...report, status, ...extra } : report
-    )));
-  }
-
-  function confirmRejection(event) {
-    event.preventDefault();
-    if (!rejectionReport) return;
-    const reason = rejectionReason.trim();
-    if (!reason) {
-      setRejectionError('Alasan penolakan wajib diisi.');
-      return;
-    }
-    updateReportStatus(rejectionReport.id, 'rejected', { rejectionReason: reason });
-    setToast(`Laporan ${rejectionReport.id} ditolak.`);
-    setRejectionReport(null);
-    setRejectionReason('');
-    setRejectionError('');
   }
 
   function applyFilters(event) {
@@ -401,13 +373,14 @@ export default function DashboardSatpam() {
                     >
                       Tinjau &amp; Verifikasi
                     </Link>
-                    <button
-                      type="button"
-                      onClick={() => openRejection(report)}
+                    <Link
+                      to={`/satpam/verifikasi/${verificationReport.id}/tolak`}
+                      state={{ report: verificationReport, from: '/satpam/dashboard' }}
+                      onClick={() => ensureStoredReport(verificationReport)}
                       className="rounded-lg border border-[#EDE4E2] bg-white px-3 py-1.5 text-[10px] font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]"
                     >
                       Alasan Tolak
-                    </button>
+                    </Link>
                   </>
                 ) : (
                   <p className="text-right text-[10px] text-[#8A7774]">
@@ -536,70 +509,6 @@ export default function DashboardSatpam() {
         </div>
       )}
 
-      {rejectionReport && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setRejectionReport(null);
-          }}
-        >
-          <form
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="rejection-title"
-            onSubmit={confirmRejection}
-            className="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl sm:p-6"
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#BE1E2D]">Penolakan Laporan</p>
-                <h2 id="rejection-title" className="mt-1 text-lg font-extrabold">Alasan Tolak</h2>
-              </div>
-              <button type="button" onClick={() => setRejectionReport(null)} aria-label="Tutup penolakan">
-                <X className="h-5 w-5 text-[#8A7774]" />
-              </button>
-            </div>
-            <div className="mt-4 rounded-xl border border-[#EDE4E2] bg-[#FAF8F7] p-3 text-xs">
-              <p className="font-bold">{rejectionReport.plate} <span className="font-normal text-[#8A7774]">· {rejectionReport.id}</span></p>
-              <p className="mt-1 text-[#8A7774]">{rejectionReport.violation}</p>
-            </div>
-            <label htmlFor="rejection-reason" className="mt-4 block text-xs font-semibold">
-              Alasan penolakan <span className="text-[#BE1E2D]">*</span>
-            </label>
-            <textarea
-              id="rejection-reason"
-              required
-              rows={4}
-              value={rejectionReason}
-              onChange={(event) => {
-                setRejectionReason(event.target.value);
-                setRejectionError('');
-              }}
-              placeholder="Contoh: Foto bukti tidak menunjukkan pelanggaran yang dilaporkan."
-              className="mt-2 w-full resize-y rounded-lg border border-[#EDE4E2] px-3 py-2.5 text-xs outline-none focus:border-[#BE1E2D]"
-            />
-            {rejectionError && <p role="alert" className="mt-1 text-xs text-[#BE1E2D]">{rejectionError}</p>}
-            <div className="mt-5 flex justify-end gap-2">
-              <button type="button" onClick={() => setRejectionReport(null)} className="rounded-lg border border-[#EDE4E2] px-4 py-2.5 text-xs font-semibold hover:bg-[#FAF8F7]">
-                Batalkan
-              </button>
-              <button type="submit" className="rounded-lg bg-[#BE1E2D] px-4 py-2.5 text-xs font-bold text-white hover:bg-[#A51020]">
-                Konfirmasi Penolakan
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {toast && (
-        <div role="status" className="fixed bottom-5 right-5 z-[70] flex max-w-sm items-center gap-2 rounded-xl bg-[#242424] px-4 py-3 text-xs font-medium text-white shadow-xl">
-          <AlertCircle className="h-4 w-4 shrink-0 text-[#D9FBE4]" />
-          <span>{toast}</span>
-          <button type="button" onClick={() => setToast('')} aria-label="Tutup pesan" className="ml-2">
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-      )}
     </div>
   );
 }

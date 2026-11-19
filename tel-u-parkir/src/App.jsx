@@ -3,6 +3,7 @@ import SatpamLayout from './layouts/SatpamLayout';
 import AntreanLaporanSatpam from './pages/AntreanLaporanSatpam';
 import DashboardSatpam from './pages/DashboardSatpam';
 import RiwayatLaporanSatpam from './pages/RiwayatLaporanSatpam';
+import TolakLaporanSatpam from './pages/TolakLaporanSatpam';
 import VerifikasiLaporan from './pages/VerifikasiLaporan';
 
 function ComingSoonPage() {
@@ -35,6 +36,7 @@ function App() {
           <Route path="dashboard" element={<DashboardSatpam />} />
           <Route path="verifikasi" element={<AntreanLaporanSatpam />} />
           <Route path="verifikasi/:reportId" element={<VerifikasiLaporan />} />
+          <Route path="verifikasi/:reportId/tolak" element={<TolakLaporanSatpam />} />
           <Route path="riwayat" element={<RiwayatLaporanSatpam />} />
           <Route path=":section" element={<ComingSoonPage />} />
           <Route path=":section/:itemId" element={<ComingSoonPage />} />

@@ -24,14 +24,6 @@ const checksToComplete = [
   { id: 'duplicate', label: 'Bukan laporan duplikat' },
 ];
 
-const rejectionReasons = [
-  'Bukti foto tidak jelas.',
-  'Plat kendaraan tidak sesuai.',
-  'Lokasi kejadian tidak sesuai.',
-  'Laporan duplikat.',
-  'Bukti tidak cukup untuk menentukan pelanggaran.',
-];
-
 function InfoRow({ label, children }) {
   return (
     <div className="grid grid-cols-[96px_minmax(0,1fr)] gap-3 text-[13px] leading-6 sm:grid-cols-[132px_minmax(0,1fr)]">
@@ -70,10 +62,6 @@ export default function VerifikasiLaporan() {
     return null;
   });
   const [confirmationOpen, setConfirmationOpen] = useState(false);
-  const [rejectionOpen, setRejectionOpen] = useState(false);
-  const [rejectionReason, setRejectionReason] = useState('');
-  const [rejectionNotes, setRejectionNotes] = useState('');
-  const [rejectionError, setRejectionError] = useState('');
   const [toast, setToast] = useState('');
 
   const selectedCategory = categories.find((category) => category.id === selectedCategoryId) || categories[0];
@@ -105,28 +93,6 @@ export default function VerifikasiLaporan() {
     });
     setConfirmationOpen(false);
     setToast(`Laporan ${currentReportId} berhasil diverifikasi.`);
-  }
-
-  function confirmRejection(event) {
-    event.preventDefault();
-    const additionalReason = rejectionNotes.trim();
-    const reason = rejectionReason === 'other'
-      ? additionalReason
-      : [rejectionReason, additionalReason].filter(Boolean).join(' ');
-    if (!reason) {
-      setRejectionError('Pilih atau tuliskan alasan penolakan.');
-      return;
-    }
-
-    setDecision({
-      status: 'rejected',
-      reason,
-      notes: officerNotes.trim(),
-    });
-    updateStoredReport(currentReportId, { status: 'rejected', rejectionReason: reason });
-    setRejectionOpen(false);
-    setRejectionError('');
-    setToast(`Laporan ${currentReportId} berhasil ditolak tanpa penambahan poin.`);
   }
 
   const statusLabel = decision?.status === 'valid'
@@ -360,18 +326,13 @@ export default function VerifikasiLaporan() {
                     </p>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setRejectionReason('');
-                    setRejectionNotes('');
-                    setRejectionError('');
-                    setRejectionOpen(true);
-                  }}
-                  className="mt-3 min-h-12 w-full rounded-lg border border-[#EDE4E2] bg-white px-4 py-3 text-sm font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]"
+                <Link
+                  to={`/satpam/verifikasi/${currentReportId}/tolak`}
+                  state={{ report, from: location.pathname }}
+                  className="mt-3 flex min-h-12 w-full items-center justify-center rounded-lg border border-[#EDE4E2] bg-white px-4 py-3 text-sm font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]"
                 >
                   Tolak dengan Alasan
-                </button>
+                </Link>
               </>
             )}
           </div>
@@ -422,73 +383,6 @@ export default function VerifikasiLaporan() {
               </button>
             </div>
           </section>
-        </div>
-      )}
-
-      {rejectionOpen && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setRejectionOpen(false);
-          }}
-        >
-          <form
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="reject-title"
-            onSubmit={confirmRejection}
-            className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl"
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs font-extrabold uppercase tracking-wider text-[#BE1E2D]">Penolakan Laporan</p>
-                <h2 id="reject-title" className="mt-1.5 text-xl font-extrabold">Tolak Laporan</h2>
-              </div>
-              <button type="button" onClick={() => setRejectionOpen(false)} aria-label="Tutup penolakan">
-                <X className="h-5 w-5 text-[#8A7774]" />
-              </button>
-            </div>
-            <p className="mt-4 text-sm text-[#8A7774]">{report.plate} <span className="mx-1">•</span> #{currentReportId}</p>
-            <label htmlFor="rejection-reason" className="mt-5 block text-sm font-semibold">
-              Pilihan alasan penolakan
-            </label>
-            <select
-              id="rejection-reason"
-              value={rejectionReason}
-              onChange={(event) => {
-                setRejectionReason(event.target.value);
-                setRejectionError('');
-              }}
-              className="mt-2 w-full min-h-11 rounded-lg border border-[#EDE4E2] bg-white px-3.5 py-3 text-sm outline-none focus:border-[#BE1E2D]"
-            >
-              <option value="">Pilih alasan...</option>
-              {rejectionReasons.map((reason) => <option key={reason} value={reason}>{reason}</option>)}
-              <option value="other">Alasan lainnya</option>
-            </select>
-            <label htmlFor="rejection-notes" className="mt-4 block text-sm font-semibold">
-              Alasan tambahan (opsional)
-            </label>
-            <textarea
-              id="rejection-notes"
-              rows={4}
-              value={rejectionNotes}
-              onChange={(event) => {
-                setRejectionNotes(event.target.value);
-                setRejectionError('');
-              }}
-              placeholder="Tambahkan keterangan jika diperlukan..."
-              className="mt-2 w-full resize-y rounded-lg border border-[#EDE4E2] px-3.5 py-3 text-sm leading-relaxed outline-none focus:border-[#BE1E2D]"
-            />
-            {rejectionError && <p role="alert" className="mt-2 text-sm text-[#BE1E2D]">{rejectionError}</p>}
-            <div className="mt-6 flex justify-end gap-3">
-              <button type="button" onClick={() => setRejectionOpen(false)} className="min-h-11 rounded-lg border border-[#EDE4E2] px-4 py-2.5 text-sm font-semibold">
-                Batalkan
-              </button>
-              <button type="submit" className="min-h-11 rounded-lg bg-[#BE1E2D] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#A51020]">
-                Konfirmasi Penolakan
-              </button>
-            </div>
-          </form>
         </div>
       )}
 

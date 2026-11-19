@@ -412,7 +412,19 @@ export default function RiwayatLaporanSatpam() {
                 {selectedReport.status === 'rejected' ? (
                   <div className="mt-2 flex gap-2 rounded-lg bg-[#FCE8E8] p-3 text-sm leading-relaxed text-[#8A7774]">
                     <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#BE1E2D]" />
-                    <p>{selectedReport.rejectionReason || 'Alasan penolakan tidak tersedia.'}</p>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-[#242424]">
+                        {selectedReport.rejectionReason || 'Alasan penolakan tidak tersedia.'}
+                      </p>
+                      <p className="mt-1">
+                        {selectedReport.rejectionExplanation || 'Penjelasan penolakan tidak tersedia.'}
+                      </p>
+                      {selectedReport.decisionAt && (
+                        <p className="mt-2 text-xs">
+                          Diputuskan {new Date(selectedReport.decisionAt).toLocaleString('id-ID')}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 ) : selectedReport.status === 'valid' ? (
                   <div className="mt-2 flex gap-2 rounded-lg bg-[#D9FBE4] p-3 text-sm leading-relaxed text-[#087A36]">

@@ -17,9 +17,17 @@ export default function SatpamLayout() {
   const location = useLocation();
   const pathSegments = location.pathname.split('/').filter(Boolean);
   const section = pathSegments[1];
-  const pageTitle = pageTitles[section] || 'Dashboard Satpam';
-  const breadcrumbItems = section === 'verifikasi' && pathSegments.length > 2
-    ? ['Satpam', 'Verifikasi Laporan', 'Bukti Belum Tersedia']
+  const isRejectingReport = section === 'verifikasi' && pathSegments.length > 3;
+  const isReviewingReport = section === 'verifikasi' && pathSegments.length > 2;
+  const pageTitle = isRejectingReport
+    ? 'Tolak Laporan'
+    : isReviewingReport
+      ? 'Verifikasi Laporan'
+      : pageTitles[section] || 'Dashboard Satpam';
+  const breadcrumbItems = isRejectingReport
+    ? ['Satpam', 'Tolak Laporan']
+    : isReviewingReport
+      ? ['Satpam', 'Verifikasi Laporan', 'Bukti Belum Tersedia']
     : section === 'verifikasi'
       ? ['Satpam', 'Report — Antrean']
       : section === 'riwayat'
