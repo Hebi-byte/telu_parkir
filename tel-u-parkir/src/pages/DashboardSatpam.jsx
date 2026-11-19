@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AlertCircle,
-  Check,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -12,6 +11,7 @@ import {
   X,
 } from 'lucide-react';
 import StatusBadge from '../components/StatusBadge';
+import { ensureStoredReport, loadReports } from '../data/reportData';
 
 const today = '2025-03-20';
 const yesterday = '2025-03-19';
@@ -49,32 +49,32 @@ function createReport(
 }
 
 const initialReports = [
-  createReport('LPR-2025-001', 'D 5482 UBW', 'Menghalangi akses kendaraan', 'Parkiran Motor GKU / Tokong Nanas', '20 Mar 2025, 08:15 WIB', 'Alifia Rahma', 'Honda Vario 160 CBS', 4, true, 'pending', today, '1202220041'),
+  createReport('LPR-2025-001', 'D 5482 UBW', 'Menghalangi akses kendaraan', 'Parkiran Motor GKU / Tokong Nanas', '20 Mar 2025, 08:15 WIB', 'Alifia Rahma', 'Honda Vario 160 CBS', 3, true, 'pending', today, '1202220041'),
   createReport('LPR-2025-002', 'D 3319 ZB', 'Parkir tidak sesuai marka', 'Zona Parkir FIT', '20 Mar 2025, 07:48 WIB', 'Mahasiswa R***', 'Yamaha NMAX', 1, false, 'pending', today, '1202220184'),
-  createReport('LPR-2025-003', 'B 6120 KJT', 'Menghalangi jalur darurat', 'Gedung Kuliah Umum, Blok B', '19 Mar 2025, 16:30 WIB', 'Mahasiswa T***', 'Honda Beat', 5, true, 'pending', today, '1202220310'),
-  createReport('LPR-2025-004', 'F 1042 ABC', 'Parkir di jalur pedestrian', 'Area Gedung TULT', '20 Mar 2025, 09:02 WIB', 'Mahasiswa A***', 'Honda Scoopy', 3, false, 'pending', today, '1202220203'),
-  createReport('LPR-2025-005', 'D 4521 TLU', 'Melewati batas parkir', 'Parkiran Motor GKU', '20 Mar 2025, 09:18 WIB', 'Mahasiswa N***', 'Yamaha Aerox', 2, false, 'pending', today, '1202220139'),
-  createReport('LPR-2025-006', 'D 1923 FIT', 'Parkir di area terlarang', 'Jalur Akses Fakultas Industri Kreatif', '20 Mar 2025, 09:41 WIB', 'Mahasiswa S***', 'Honda Vario', 3, false, 'pending', today, '1202220295'),
-  createReport('LPR-2025-007', 'B 9021 TEL', 'Menghalangi akses kendaraan', 'Parkiran Gedung Kuliah Umum', '20 Mar 2025, 10:06 WIB', 'Mahasiswa M***', 'Suzuki Satria F', 4, true, 'pending', today, '1202220108'),
+  createReport('LPR-2025-003', 'B 6120 KJT', 'Menghalangi akses kendaraan', 'Gedung Kuliah Umum, Blok B', '19 Mar 2025, 16:30 WIB', 'Mahasiswa T***', 'Honda Beat', 3, true, 'pending', today, '1202220310'),
+  createReport('LPR-2025-004', 'F 1042 ABC', 'Parkir di area terlarang', 'Area Gedung TULT', '20 Mar 2025, 09:02 WIB', 'Mahasiswa A***', 'Honda Scoopy', 7, false, 'pending', today, '1202220203'),
+  createReport('LPR-2025-005', 'D 4521 TLU', 'Parkir tidak sesuai marka', 'Parkiran Motor GKU', '20 Mar 2025, 09:18 WIB', 'Mahasiswa N***', 'Yamaha Aerox', 1, false, 'pending', today, '1202220139'),
+  createReport('LPR-2025-006', 'D 1923 FIT', 'Parkir di area terlarang', 'Jalur Akses Fakultas Industri Kreatif', '20 Mar 2025, 09:41 WIB', 'Mahasiswa S***', 'Honda Vario', 7, false, 'pending', today, '1202220295'),
+  createReport('LPR-2025-007', 'B 9021 TEL', 'Menghalangi akses kendaraan', 'Parkiran Gedung Kuliah Umum', '20 Mar 2025, 10:06 WIB', 'Mahasiswa M***', 'Suzuki Satria F', 3, true, 'pending', today, '1202220108'),
 
   createReport('LPR-2025-008', 'D 1102 ABC', 'Parkir tidak sesuai marka', 'Zona Parkir FIT', '20 Mar 2025, 06:55 WIB', 'Mahasiswa D***', 'Honda Vario', 1, false, 'valid', today, '1202220101'),
-  createReport('LPR-2025-009', 'D 7781 TLU', 'Parkir di area terlarang', 'Area Gedung TULT', '20 Mar 2025, 06:40 WIB', 'Mahasiswa F***', 'Yamaha NMAX', 3, false, 'valid', today, '1202220102'),
-  createReport('LPR-2025-010', 'B 2401 TEL', 'Menghalangi jalur darurat', 'Gedung Kuliah Umum, Blok A', '20 Mar 2025, 06:20 WIB', 'Mahasiswa H***', 'Honda Beat', 5, true, 'valid', today, '1202220103'),
-  createReport('LPR-2025-011', 'D 3098 FIT', 'Melewati batas parkir', 'Parkiran Motor GKU', '20 Mar 2025, 06:15 WIB', 'Mahasiswa I***', 'Honda Scoopy', 2, false, 'valid', today, '1202220104'),
-  createReport('LPR-2025-012', 'F 6120 TLU', 'Parkir di jalur pedestrian', 'Jalur Pejalan Kaki TULT', '20 Mar 2025, 06:03 WIB', 'Mahasiswa J***', 'Yamaha Fazzio', 3, false, 'valid', today, '1202220105'),
-  createReport('LPR-2025-013', 'D 5567 ABC', 'Menghalangi akses kendaraan', 'Parkiran Gedung Kuliah Umum', '20 Mar 2025, 05:52 WIB', 'Mahasiswa K***', 'Honda Vario', 4, true, 'valid', today, '1202220106'),
+  createReport('LPR-2025-009', 'D 7781 TLU', 'Parkir di area terlarang', 'Area Gedung TULT', '20 Mar 2025, 06:40 WIB', 'Mahasiswa F***', 'Yamaha NMAX', 7, false, 'valid', today, '1202220102'),
+  createReport('LPR-2025-010', 'B 2401 TEL', 'Menghalangi akses kendaraan', 'Gedung Kuliah Umum, Blok A', '20 Mar 2025, 06:20 WIB', 'Mahasiswa H***', 'Honda Beat', 3, true, 'valid', today, '1202220103'),
+  createReport('LPR-2025-011', 'D 3098 FIT', 'Parkir tidak sesuai marka', 'Parkiran Motor GKU', '20 Mar 2025, 06:15 WIB', 'Mahasiswa I***', 'Honda Scoopy', 1, false, 'valid', today, '1202220104'),
+  createReport('LPR-2025-012', 'F 6120 TLU', 'Parkir di area terlarang', 'Jalur Pejalan Kaki TULT', '20 Mar 2025, 06:03 WIB', 'Mahasiswa J***', 'Yamaha Fazzio', 7, false, 'valid', today, '1202220105'),
+  createReport('LPR-2025-013', 'D 5567 ABC', 'Menghalangi akses kendaraan', 'Parkiran Gedung Kuliah Umum', '20 Mar 2025, 05:52 WIB', 'Mahasiswa K***', 'Honda Vario', 3, true, 'valid', today, '1202220106'),
   createReport('LPR-2025-014', 'B 7812 FIT', 'Parkir tidak sesuai marka', 'Zona Parkir FIT', '20 Mar 2025, 05:44 WIB', 'Mahasiswa L***', 'Yamaha Aerox', 1, false, 'valid', today, '1202220107'),
-  createReport('LPR-2025-015', 'D 9023 TEL', 'Parkir di area terlarang', 'Area Gedung TULT', '20 Mar 2025, 05:30 WIB', 'Mahasiswa P***', 'Honda Beat', 3, false, 'valid', today, '1202220109'),
-  createReport('LPR-2025-016', 'F 1234 TLU', 'Menghalangi jalur darurat', 'Gedung Kuliah Umum, Blok B', '20 Mar 2025, 05:21 WIB', 'Mahasiswa Q***', 'Honda Vario', 5, true, 'valid', today, '1202220110'),
-  createReport('LPR-2025-017', 'D 4488 FIT', 'Melewati batas parkir', 'Parkiran Motor GKU', '20 Mar 2025, 05:11 WIB', 'Mahasiswa U***', 'Yamaha NMAX', 2, false, 'valid', today, '1202220111'),
+  createReport('LPR-2025-015', 'D 9023 TEL', 'Parkir di area terlarang', 'Area Gedung TULT', '20 Mar 2025, 05:30 WIB', 'Mahasiswa P***', 'Honda Beat', 7, false, 'valid', today, '1202220109'),
+  createReport('LPR-2025-016', 'F 1234 TLU', 'Menghalangi akses kendaraan', 'Gedung Kuliah Umum, Blok B', '20 Mar 2025, 05:21 WIB', 'Mahasiswa Q***', 'Honda Vario', 3, true, 'valid', today, '1202220110'),
+  createReport('LPR-2025-017', 'D 4488 FIT', 'Parkir tidak sesuai marka', 'Parkiran Motor GKU', '20 Mar 2025, 05:11 WIB', 'Mahasiswa U***', 'Yamaha NMAX', 1, false, 'valid', today, '1202220111'),
   createReport('LPR-2025-018', 'B 6621 TEL', 'Parkir tidak sesuai marka', 'Zona Parkir FIT', '20 Mar 2025, 04:58 WIB', 'Mahasiswa V***', 'Honda Scoopy', 1, false, 'valid', today, '1202220112'),
-  createReport('LPR-2025-019', 'D 2510 ABC', 'Parkir di jalur pedestrian', 'Jalur Pejalan Kaki TULT', '20 Mar 2025, 04:47 WIB', 'Mahasiswa W***', 'Suzuki Nex', 3, false, 'valid', today, '1202220113'),
+  createReport('LPR-2025-019', 'D 2510 ABC', 'Parkir di area terlarang', 'Jalur Pejalan Kaki TULT', '20 Mar 2025, 04:47 WIB', 'Mahasiswa W***', 'Suzuki Nex', 7, false, 'valid', today, '1202220113'),
 
-  createReport('LPR-2025-020', 'D 6001 TLU', 'Parkir di area terlarang', 'Area Gedung TULT', '20 Mar 2025, 04:35 WIB', 'Mahasiswa Y***', 'Honda Beat', 3, false, 'rejected', today, '1202220114'),
+  createReport('LPR-2025-020', 'D 6001 TLU', 'Parkir di area terlarang', 'Area Gedung TULT', '20 Mar 2025, 04:35 WIB', 'Mahasiswa Y***', 'Honda Beat', 7, false, 'rejected', today, '1202220114'),
   createReport('LPR-2025-021', 'F 5501 FIT', 'Parkir tidak sesuai marka', 'Zona Parkir FIT', '20 Mar 2025, 04:20 WIB', 'Mahasiswa Z***', 'Yamaha Mio', 1, false, 'rejected', today, '1202220115'),
 
-  createReport('LPR-2025-022', 'D 7810 ABC', 'Melewati batas parkir', 'Parkiran Motor GKU', '19 Mar 2025, 15:10 WIB', 'Mahasiswa B***', 'Honda Vario', 2, false, 'pending', yesterday, '1202220201'),
-  createReport('LPR-2025-023', 'B 4402 TEL', 'Parkir di area terlarang', 'Area Gedung TULT', '19 Mar 2025, 14:32 WIB', 'Mahasiswa C***', 'Yamaha NMAX', 3, false, 'valid', yesterday, '1202220202'),
+  createReport('LPR-2025-022', 'D 7810 ABC', 'Parkir tidak sesuai marka', 'Parkiran Motor GKU', '19 Mar 2025, 15:10 WIB', 'Mahasiswa B***', 'Honda Vario', 1, false, 'pending', yesterday, '1202220201'),
+  createReport('LPR-2025-023', 'B 4402 TEL', 'Parkir di area terlarang', 'Area Gedung TULT', '19 Mar 2025, 14:32 WIB', 'Mahasiswa C***', 'Yamaha NMAX', 7, false, 'valid', yesterday, '1202220202'),
   createReport('LPR-2025-024', 'D 2901 FIT', 'Parkir tidak sesuai marka', 'Zona Parkir FIT', '19 Mar 2025, 13:15 WIB', 'Mahasiswa E***', 'Honda Beat', 1, false, 'rejected', yesterday, '1202220204'),
 ];
 
@@ -110,19 +110,31 @@ function SummaryCard({ label, value, highlighted = false }) {
   );
 }
 
-function formatNim(value) {
-  return value || '—';
+function getVerificationReport(report, verificationReports) {
+  const existingReport = verificationReports.find((item) => item.plate === report.plate);
+  if (existingReport) return existingReport;
+
+  const [reportDate, ...timeParts] = report.reportTime.split(', ');
+  return {
+    ...report,
+    reportDate,
+    reportTime: timeParts.join(', '),
+    reportedBy: report.reporter,
+    description: `Laporan ${report.violation.toLocaleLowerCase('id-ID')} di ${report.location}.`,
+    owner: report.reporter,
+    studyProgram: '—',
+  };
 }
 
 export default function DashboardSatpam() {
   const [reports, setReports] = useState(initialReports);
+  const [verificationReports] = useState(() => loadReports());
   const [dateFilter, setDateFilter] = useState('today');
   const [statusFilter, setStatusFilter] = useState('pending');
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState(emptyFilters);
   const [draftFilters, setDraftFilters] = useState(emptyFilters);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [selectedReport, setSelectedReport] = useState(null);
   const [rejectionReport, setRejectionReport] = useState(null);
   const [rejectionReason, setRejectionReason] = useState('');
   const [rejectionError, setRejectionError] = useState('');
@@ -182,20 +194,12 @@ export default function DashboardSatpam() {
     setRejectionReport(report);
     setRejectionReason('');
     setRejectionError('');
-    setSelectedReport(null);
   }
 
   function updateReportStatus(reportId, status, extra = {}) {
     setReports((currentReports) => currentReports.map((report) => (
       report.id === reportId ? { ...report, status, ...extra } : report
     )));
-  }
-
-  function approveReport() {
-    if (!selectedReport) return;
-    updateReportStatus(selectedReport.id, 'valid', { pointsApplied: selectedReport.potentialPoints });
-    setToast(`Laporan ${selectedReport.id} berhasil diverifikasi.`);
-    setSelectedReport(null);
   }
 
   function confirmRejection(event) {
@@ -349,7 +353,9 @@ export default function DashboardSatpam() {
         </div>
 
         <div className="space-y-2.5">
-          {pageReports.map((report) => (
+          {pageReports.map((report) => {
+            const verificationReport = getVerificationReport(report, verificationReports);
+            return (
             <article
               key={report.id}
               className="grid gap-3 rounded-2xl border border-[#EDE4E2] bg-white p-3 sm:grid-cols-[76px_minmax(0,1fr)_138px] sm:items-center sm:gap-4 sm:p-3.5"
@@ -387,13 +393,14 @@ export default function DashboardSatpam() {
                 </StatusBadge>
                 {report.status === 'pending' ? (
                   <>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedReport(report)}
-                      className="rounded-lg bg-[#BE1E2D] px-3 py-2 text-[10px] font-bold text-white transition-colors hover:bg-[#A51020]"
+                    <Link
+                      to={`/satpam/verifikasi/${verificationReport.id}`}
+                      state={{ report: verificationReport }}
+                      onClick={() => ensureStoredReport(verificationReport)}
+                      className="rounded-lg bg-[#BE1E2D] px-3 py-2 text-center text-[10px] font-bold text-white transition-colors hover:bg-[#A51020]"
                     >
                       Tinjau &amp; Verifikasi
-                    </button>
+                    </Link>
                     <button
                       type="button"
                       onClick={() => openRejection(report)}
@@ -411,7 +418,8 @@ export default function DashboardSatpam() {
                 )}
               </div>
             </article>
-          ))}
+            );
+          })}
 
           {pageReports.length === 0 && (
             <div className="rounded-2xl border border-dashed border-[#EDE4E2] bg-white px-6 py-12 text-center">
@@ -525,64 +533,6 @@ export default function DashboardSatpam() {
               </button>
             </div>
           </form>
-        </div>
-      )}
-
-      {selectedReport && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setSelectedReport(null);
-          }}
-        >
-          <section role="dialog" aria-modal="true" aria-labelledby="review-title" className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl sm:p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#BE1E2D]">Pemeriksaan Laporan</p>
-                <h2 id="review-title" className="mt-1 text-lg font-extrabold">Tinjau &amp; Verifikasi</h2>
-              </div>
-              <button type="button" onClick={() => setSelectedReport(null)} aria-label="Tutup detail laporan">
-                <X className="h-5 w-5 text-[#8A7774]" />
-              </button>
-            </div>
-            <div className="mt-5 space-y-4">
-              <div className="flex h-36 items-center justify-center rounded-xl bg-[#F1EFEE] text-center text-xs text-[#8A7774]">
-                <div><ImageOff className="mx-auto mb-2 h-6 w-6" />Foto bukti belum tersedia</div>
-              </div>
-              <div className="grid grid-cols-2 gap-3 text-xs">
-                <div><p className="text-[#8A7774]">Plat nomor</p><p className="mt-1 font-bold">{selectedReport.plate}</p></div>
-                <div><p className="text-[#8A7774]">ID laporan</p><p className="mt-1 font-semibold">{selectedReport.id}</p></div>
-                <div><p className="text-[#8A7774]">Jenis pelanggaran</p><p className="mt-1 font-semibold">{selectedReport.violation}</p></div>
-                <div><p className="text-[#8A7774]">Waktu kejadian</p><p className="mt-1 font-semibold">{selectedReport.reportTime}</p></div>
-                <div><p className="text-[#8A7774]">Lokasi</p><p className="mt-1 font-semibold">{selectedReport.location}</p></div>
-                <div><p className="text-[#8A7774]">Pelapor / NIM</p><p className="mt-1 font-semibold">{selectedReport.reporter} / {formatNim(selectedReport.nim)}</p></div>
-                <div><p className="text-[#8A7774]">Kendaraan</p><p className="mt-1 font-semibold">{selectedReport.vehicle}</p></div>
-              </div>
-              <div className="flex items-center justify-between rounded-xl bg-[#FCE8E8]/60 p-3 text-xs">
-                <div>
-                  <p className="font-semibold">Poin jika diverifikasi</p>
-                  <p className="mt-1 text-[#8A7774]">Poin saat ini {selectedReport.currentPoints} → {selectedReport.currentPoints + selectedReport.potentialPoints}</p>
-                </div>
-                <StatusBadge type="warning">+{selectedReport.potentialPoints} poin</StatusBadge>
-              </div>
-            </div>
-            <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              <button
-                type="button"
-                onClick={() => openRejection(selectedReport)}
-                className="rounded-lg border border-[#EDE4E2] px-4 py-2.5 text-xs font-bold text-[#BE1E2D] hover:border-[#BE1E2D]"
-              >
-                Tolak Laporan
-              </button>
-              <button
-                type="button"
-                onClick={approveReport}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#BE1E2D] px-4 py-2.5 text-xs font-bold text-white hover:bg-[#A51020]"
-              >
-                <Check className="h-4 w-4" /> Setujui &amp; Terapkan Poin
-              </button>
-            </div>
-          </section>
         </div>
       )}
 

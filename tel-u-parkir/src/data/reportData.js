@@ -198,6 +198,15 @@ export function loadReports() {
   return parsedReports;
 }
 
+export function ensureStoredReport(report) {
+  const reports = loadReports();
+  if (reports.some((storedReport) => storedReport.id === report.id)) return reports;
+
+  const updatedReports = [...reports, report];
+  window.localStorage.setItem(storageKey, JSON.stringify(updatedReports));
+  return updatedReports;
+}
+
 export function updateStoredReport(reportId, updates) {
   const reports = loadReports();
   let reportFound = false;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import {
   AlertCircle,
   ArrowLeft,
@@ -43,8 +43,9 @@ function InfoRow({ label, children }) {
 
 export default function VerifikasiLaporan() {
   const { reportId } = useParams();
+  const location = useLocation();
   const currentReportId = reportId || defaultReportId;
-  const report = loadReports().find((item) => item.id === currentReportId);
+  const report = loadReports().find((item) => item.id === currentReportId) || location.state?.report;
   const [selectedCategoryId, setSelectedCategoryId] = useState(
     () => categories.find((category) => category.label === report?.violation)?.id || 'access',
   );
