@@ -32,9 +32,11 @@ export default function TolakLaporanSatpam() {
   const location = useLocation();
   const [reports, setReports] = useState(() => loadReports());
   const report = reports.find((item) => item.id === reportId) || location.state?.report;
-  const returnTo = typeof location.state?.from === 'string' && location.state.from.startsWith('/satpam/')
+  const isAdmin = location.pathname.startsWith('/admin') || (typeof location.state?.from === 'string' && location.state.from.startsWith('/admin'));
+  const defaultReturn = isAdmin ? '/admin/verifikasi' : '/satpam/verifikasi';
+  const returnTo = typeof location.state?.from === 'string'
     ? location.state.from
-    : '/satpam/verifikasi';
+    : defaultReturn;
   const [selectedReason, setSelectedReason] = useState('');
   const [explanation, setExplanation] = useState('');
   const [reasonError, setReasonError] = useState('');

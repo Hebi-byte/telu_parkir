@@ -36,8 +36,13 @@ function InfoRow({ label, children }) {
 export default function VerifikasiLaporan() {
   const { reportId } = useParams();
   const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+  const returnTo = isAdmin ? '/admin/verifikasi' : '/satpam/verifikasi';
   const currentReportId = reportId || defaultReportId;
   const report = loadReports().find((item) => item.id === currentReportId) || location.state?.report;
+  const rejectTo = isAdmin
+    ? `/admin/verifikasi/${currentReportId}/tolak`
+    : `/satpam/verifikasi/${currentReportId}/tolak`;
   const [selectedCategoryId, setSelectedCategoryId] = useState(
     () => categories.find((category) => category.label === report?.violation)?.id || 'access',
   );
@@ -111,17 +116,19 @@ export default function VerifikasiLaporan() {
       <section className="rounded-2xl border border-[#EDE4E2] bg-white p-8">
         <h1 className="text-2xl font-bold">Laporan tidak ditemukan</h1>
         <p className="mt-2 text-sm text-[#8A7774]">ID laporan {currentReportId} tidak tersedia dalam data laporan.</p>
-        <Link to="/satpam/verifikasi" className="mt-4 inline-flex text-sm font-semibold text-[#BE1E2D] hover:underline">
+        <Link to={returnTo} className="mt-4 inline-flex text-sm font-semibold text-[#BE1E2D] hover:underline">
           Kembali ke Antrean Laporan
         </Link>
       </section>
     );
   }
 
+  const evidencePhoto = report.evidencePhoto || report.photoUrl;
+
   return (
     <div>
       <Link
-        to="/satpam/verifikasi"
+        to={returnTo}
         className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-[#BE1E2D] hover:underline"
       >
         <ArrowLeft className="h-4 w-4" /> Kembali ke Antrean Laporan
@@ -129,8 +136,7 @@ export default function VerifikasiLaporan() {
 
       <header className="mb-6">
         <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#BE1E2D]">
-          Panel Satpam <span className="mx-1">•</span> Pos Gerbang 1
-          <span className="mx-1">•</span> #{currentReportId}
+          {isAdmin ? 'Portal Admin • Unit Logistik & Keamanan' : 'Panel Satpam • Pos Gerbang 1'} <span className="mx-1">•</span> #{currentReportId}
         </p>
         <h1 className="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">Verifikasi Laporan</h1>
         <p className="mt-2 text-sm text-[#8A7774]">
@@ -142,19 +148,44 @@ export default function VerifikasiLaporan() {
         <section className="space-y-5 rounded-xl border border-[#EDE4E2] bg-white p-5">
           <div>
             <h2 className="text-base font-bold">Bukti Foto</h2>
-            <div
-              role="img"
-              aria-label="Foto contoh belum tersedia"
-              className="mt-3 flex h-48 items-center justify-center rounded-lg bg-[#F1EFEE] text-center text-[#8A7774] sm:h-52"
-            >
-              <div>
-                <ImageOff className="mx-auto h-7 w-7" />
-                <p className="mt-2 text-xs">Foto contoh belum tersedia</p>
+            {evidencePhoto ? (
+              <div className="mt-3 overflow-hidden rounded-xl border border-[#EDE4E2] bg-gray-100 max-h-72">
+                <img
+                  src={evidencePhoto}
+                  alt={`Bukti Pelanggaran ${currentReportId}`}
+                  className="h-56 sm:h-64 w-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+                <div
+                  role="img"
+                  aria-label="Foto contoh belum tersedia"
+                  style={{ display: 'none' }}
+                  className="h-48 items-center justify-center rounded-lg bg-[#F1EFEE] text-center text-[#8A7774] sm:h-52"
+                >
+                  <div>
+                    <ImageOff className="mx-auto h-7 w-7" />
+                    <p className="mt-2 text-xs">Foto tidak dapat dimuat</p>
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div
+                role="img"
+                aria-label="Foto contoh belum tersedia"
+                className="mt-3 flex h-48 items-center justify-center rounded-lg bg-[#F1EFEE] text-center text-[#8A7774] sm:h-52"
+              >
+                <div>
+                  <ImageOff className="mx-auto h-7 w-7" />
+                  <p className="mt-2 text-xs">Foto contoh belum tersedia</p>
+                </div>
+              </div>
+            )}
             <p className="mt-3 text-xs text-[#8A7774]">
               {report.reportDate} <span className="mx-1">•</span> {report.reportTime}
-              <span className="mx-1">•</span> Parkiran Motor GKU
+              <span className="mx-1">•</span> {report.location}
             </p>
           </div>
 
@@ -325,7 +356,7 @@ export default function VerifikasiLaporan() {
                   </div>
                 </div>
                 <Link
-                  to={`/satpam/verifikasi/${currentReportId}/tolak`}
+                  to={rejectTo}
                   state={{ report, from: location.pathname }}
                   className="mt-3 flex min-h-12 w-full items-center justify-center rounded-lg border border-[#EDE4E2] bg-white px-4 py-3 text-center text-sm font-semibold text-[#BE1E2D] hover:border-[#BE1E2D]"
                 >

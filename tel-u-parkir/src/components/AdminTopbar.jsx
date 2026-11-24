@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Bell, ChevronDown, Menu, Settings2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Bell, ChevronDown, LogOut, Menu, UserRound } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const notifications = [
   { id: 1, title: 'Laporan prioritas baru', detail: 'RPT-8824 menunggu verifikasi.', time: '5 menit lalu' },
@@ -9,8 +9,10 @@ const notifications = [
 ];
 
 export default function AdminTopbar({ breadcrumbItems, onOpenMobileSidebar }) {
+  const navigate = useNavigate();
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const profileRef = useRef(null);
   const notificationsRef = useRef(null);
 
@@ -105,15 +107,68 @@ export default function AdminTopbar({ breadcrumbItems, onOpenMobileSidebar }) {
               <Link
                 to="/admin/pengaturan"
                 onClick={() => setProfileOpen(false)}
-                className="mt-1 flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium hover:bg-[#FAF8F7]"
+                className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-[#FAF8F7]"
               >
-                <Settings2 className="h-4 w-4 text-[#8A7774]" />
-                Profil &amp; Pengaturan
+                <UserRound className="h-4 w-4 text-[#8A7774]" /> Profil admin
               </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setProfileOpen(false);
+                  setLogoutModalOpen(true);
+                }}
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium text-[#BE1E2D] hover:bg-[#FCE8E8]"
+              >
+                <LogOut className="h-4 w-4" />
+                Keluar
+              </button>
             </div>
           )}
         </div>
       </div>
+
+      {/* Modal Konfirmasi Logout */}
+      {logoutModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setLogoutModalOpen(false);
+          }}
+        >
+          <div className="w-full max-w-sm rounded-2xl border border-[#EDE4E2] bg-white p-6 shadow-xl">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-[#FCE8E8] text-[#BE1E2D]">
+              <LogOut className="h-6 w-6" />
+            </div>
+            <h3 className="mt-4 text-center text-lg font-bold text-[#1A1A1A]">
+              Keluar dari Akun Admin?
+            </h3>
+            <p className="mt-2 text-center text-xs leading-relaxed text-[#8A7774]">
+              Anda akan diarahkan ke halaman keluar. Karena autentikasi belum terhubung, tindakan ini hanya simulasi.
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setLogoutModalOpen(false)}
+                className="flex-1 rounded-xl border border-[#EDE4E2] py-2.5 text-xs font-bold text-[#554A48] hover:bg-[#FAF8F7]"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setLogoutModalOpen(false);
+                  navigate('/satpam/login');
+                }}
+                className="flex-1 rounded-xl bg-[#BE1E2D] py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#A51020]"
+              >
+                Ya, Keluar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

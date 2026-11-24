@@ -7,15 +7,20 @@ import Footer from '../components/Footer';
 const pageTitles = {
   dashboard: 'Dashboard Admin',
   pelanggaran: 'Manajemen Pelanggaran',
-  kehilangan: 'Kehilangan',
-  pengaturan: 'Profil & Pengaturan',
+  verifikasi: 'Antrean Verifikasi Laporan Parkir',
+  kehilangan: 'Pengelolaan Kehilangan & Penemuan Kunci',
+  pengaturan: 'Profil Admin & Pengaturan',
 };
 
 export default function AdminLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const section = location.pathname.split('/').filter(Boolean)[1] || 'dashboard';
-  const pageTitle = pageTitles[section] || 'Dashboard Admin';
+  const segments = location.pathname.split('/').filter(Boolean);
+  const section = segments[1] || 'dashboard';
+  const isVerifikasiDetail = section === 'verifikasi' && segments[2] && segments[2] !== 'tolak';
+  const pageTitle = isVerifikasiDetail
+    ? `Detail & Verifikasi — ${segments[2]}`
+    : pageTitles[section] || 'Dashboard Admin';
 
   useEffect(() => {
     const previousTitle = document.title;

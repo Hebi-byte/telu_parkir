@@ -2,8 +2,12 @@ import { BrowserRouter, Link, Navigate, Route, Routes, useParams } from 'react-r
 import AdminLayout from './layouts/AdminLayout';
 import SatpamLayout from './layouts/SatpamLayout';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminAntreanVerifikasi from './pages/AdminAntreanVerifikasi';
+import AdminDetailVerifikasi from './pages/AdminDetailVerifikasi';
+import AdminKehilangan from './pages/AdminKehilangan';
 import AdminModulePage from './pages/AdminModulePage';
 import AdminPelanggaran from './pages/AdminPelanggaran';
+import AdminProfilPengaturan from './pages/AdminProfilPengaturan';
 import AntreanLaporanSatpam from './pages/AntreanLaporanSatpam';
 import BuatLaporanKunciSatpam from './pages/BuatLaporanKunciSatpam';
 import DashboardSatpam from './pages/DashboardSatpam';
@@ -25,12 +29,20 @@ function SatpamLoginPage() {
         <p className="mt-2 text-sm text-[#8A7774]">
           Sesi keluar ini disimulasikan karena autentikasi belum terhubung.
         </p>
-        <Link
-          to="/satpam/dashboard"
-          className="mt-5 inline-flex min-h-10 items-center justify-center rounded-lg bg-[#BE1E2D] px-4 text-sm font-bold text-white hover:bg-[#A51020]"
-        >
-          Kembali ke Portal Satpam
-        </Link>
+        <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">
+          <Link
+            to="/admin/dashboard"
+            className="inline-flex min-h-10 items-center justify-center rounded-lg bg-[#BE1E2D] px-4 text-sm font-bold text-white hover:bg-[#A51020]"
+          >
+            Kembali ke Portal Admin
+          </Link>
+          <Link
+            to="/satpam/dashboard"
+            className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[#EDE4E2] bg-white px-4 text-sm font-bold text-[#554a48] hover:bg-[#FAF8F7]"
+          >
+            Kembali ke Portal Satpam
+          </Link>
+        </div>
       </section>
     </main>
   );
@@ -66,9 +78,11 @@ function App() {
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="pelanggaran" element={<AdminPelanggaran />} />
-            <Route path="verifikasi" element={<Navigate to="/satpam/verifikasi" replace />} />
-            <Route path="kehilangan" element={<AdminModulePage title="Kehilangan" />} />
-            <Route path="pengaturan" element={<AdminModulePage title="Profil & Pengaturan" />} />
+            <Route path="verifikasi" element={<AdminAntreanVerifikasi />} />
+            <Route path="verifikasi/:reportId" element={<AdminDetailVerifikasi />} />
+            <Route path="verifikasi/:reportId/tolak" element={<TolakLaporanSatpam />} />
+            <Route path="kehilangan" element={<AdminKehilangan />} />
+            <Route path="pengaturan" element={<AdminProfilPengaturan />} />
             <Route path="*" element={<AdminModulePage title="Halaman tidak ditemukan" />} />
           </Route>
           <Route path="/satpam/login" element={<SatpamLoginPage />} />
