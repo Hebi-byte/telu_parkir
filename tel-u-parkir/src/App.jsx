@@ -1,5 +1,9 @@
 import { BrowserRouter, Link, Navigate, Route, Routes, useParams } from 'react-router-dom';
+import AdminLayout from './layouts/AdminLayout';
 import SatpamLayout from './layouts/SatpamLayout';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminModulePage from './pages/AdminModulePage';
+import AdminPelanggaran from './pages/AdminPelanggaran';
 import AntreanLaporanSatpam from './pages/AntreanLaporanSatpam';
 import BuatLaporanKunciSatpam from './pages/BuatLaporanKunciSatpam';
 import DashboardSatpam from './pages/DashboardSatpam';
@@ -58,6 +62,15 @@ function App() {
       <SatpamProfileProvider>
         <Routes>
           <Route path="/" element={<Navigate to="/satpam/dashboard" replace />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="pelanggaran" element={<AdminPelanggaran />} />
+            <Route path="verifikasi" element={<Navigate to="/satpam/verifikasi" replace />} />
+            <Route path="kehilangan" element={<AdminModulePage title="Kehilangan" />} />
+            <Route path="pengaturan" element={<AdminModulePage title="Profil & Pengaturan" />} />
+            <Route path="*" element={<AdminModulePage title="Halaman tidak ditemukan" />} />
+          </Route>
           <Route path="/satpam/login" element={<SatpamLoginPage />} />
           <Route path="/satpam" element={<SatpamLayout />}>
             <Route index element={<Navigate to="dashboard" replace />} />

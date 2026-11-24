@@ -144,6 +144,7 @@ export default function DashboardSatpam() {
   const [filters, setFilters] = useState(emptyFilters);
   const [draftFilters, setDraftFilters] = useState(emptyFilters);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 3;
 
@@ -360,11 +361,22 @@ export default function DashboardSatpam() {
               </div>
 
               <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-stretch">
-                <StatusBadge type="warning" className="self-end px-2 py-0.5 text-xs">
-                  +{report.potentialPoints} Potensial
-                </StatusBadge>
+                <div className="flex flex-col items-end gap-2 sm:items-stretch">
+                  <StatusBadge type="warning" className="self-end px-2 py-0.5 text-xs">
+                    +{report.potentialPoints} Potensial
+                  </StatusBadge>
+                  {report.status !== 'pending' && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedReport(verificationReport)}
+                      className="min-h-9 rounded-lg border border-[#EDE4E2] px-3 py-1.5 text-center text-xs font-semibold text-[#BE1E2D] hover:border-[#BE1E2D] hover:bg-[#FDF3F3]"
+                    >
+                      Detail
+                    </button>
+                  )}
+                </div>
                 {report.status === 'pending' ? (
-                  <>
+                  <div className="flex gap-2 sm:flex-col">
                     <Link
                       to={`/satpam/verifikasi/${verificationReport.id}`}
                       state={{ report: verificationReport }}
@@ -381,7 +393,7 @@ export default function DashboardSatpam() {
                     >
                       Tolak
                     </Link>
-                  </>
+                  </div>
                 ) : (
                   <p className="text-right text-xs text-[#8A7774]">
                     {report.status === 'rejected' && report.rejectionReason
@@ -506,6 +518,101 @@ export default function DashboardSatpam() {
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {selectedReport && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-3 sm:p-5"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setSelectedReport(null);
+          }}
+        >
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="dashboard-report-detail-title"
+            className="max-h-[min(90vh,44rem)] w-full max-w-2xl overflow-y-auto rounded-2xl border border-[#EDE4E2] bg-white p-5 shadow-2xl sm:p-7"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-extrabold uppercase tracking-wider text-[#BE1E2D]">Detail Laporan</p>
+                <h2 id="dashboard-report-detail-title" className="mt-1.5 text-xl font-extrabold sm:text-2xl">
+                  #{selectedReport.id}
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedReport(null)}
+                aria-label="Tutup detail laporan"
+                className="rounded-lg p-2 text-[#8A7774] hover:bg-[#FAF8F7]"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <h3 className="text-xl font-extrabold">{selectedReport.plate}</h3>
+              <StatusBadge type={statusTypes[selectedReport.status]} className="px-2.5 py-1 text-xs">
+                {statusLabels[selectedReport.status]}
+              </StatusBadge>
+            </div>
+            <p className="mt-2 text-sm font-semibold">{selectedReport.violation}</p>
+
+            <dl className="mt-5 grid gap-x-4 gap-y-3 border-t border-[#EDE4E2] pt-5 text-sm sm:grid-cols-[140px_minmax(0,1fr)]">
+              <dt className="text-[#8A7774]">Lokasi kejadian</dt>
+              <dd className="font-medium">{selectedReport.location}</dd>
+              <dt className="text-[#8A7774]">Waktu laporan</dt>
+              <dd className="font-medium">{selectedReport.reportTime}</dd>
+              <dt className="text-[#8A7774]">Kendaraan</dt>
+              <dd className="font-medium">{selectedReport.vehicle}</dd>
+              <dt className="text-[#8A7774]">Pelapor</dt>
+              <dd className="font-medium">{selectedReport.reportedBy || selectedReport.reporter}</dd>
+              <dt className="text-[#8A7774]">NIM</dt>
+              <dd className="font-medium">{selectedReport.nim || '—'}</dd>
+              <dt className="text-[#8A7774]">Poin potensial</dt>
+              <dd className="font-medium">+{selectedReport.potentialPoints} poin</dd>
+              <dt className="text-[#8A7774]">Proyeksi poin</dt>
+              <dd className="font-medium">
+                {selectedReport.currentPoints} → {selectedReport.currentPoints + selectedReport.potentialPoints} poin
+              </dd>
+            </dl>
+
+            <div className="mt-5 grid gap-4 border-t border-[#EDE4E2] pt-5 sm:grid-cols-2">
+              <div>
+                <h3 className="text-sm font-bold">Deskripsi Laporan</h3>
+                <p className="mt-2 text-sm leading-relaxed text-[#8A7774]">
+                  {selectedReport.description || `Laporan ${selectedReport.violation.toLocaleLowerCase('id-ID')} di ${selectedReport.location}.`}
+                </p>
+              </div>
+              <div>
+                <h3 className="text-sm font-bold">Keterangan Status</h3>
+                <p className={`mt-2 rounded-lg p-3 text-sm leading-relaxed ${
+                  selectedReport.status === 'rejected'
+                    ? 'bg-[#FCE8E8] text-[#BE1E2D]'
+                    : selectedReport.status === 'valid'
+                      ? 'bg-[#D9FBE4] text-[#087A36]'
+                      : 'bg-[#FFF1CC] text-[#8A6100]'
+                }`}>
+                  {selectedReport.status === 'rejected'
+                    ? selectedReport.rejectionReason || 'Laporan ditolak.'
+                    : selectedReport.status === 'valid'
+                      ? `Laporan telah diverifikasi. ${selectedReport.pointsApplied || selectedReport.potentialPoints} poin diterapkan.`
+                      : 'Laporan masih menunggu verifikasi.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end border-t border-[#EDE4E2] pt-4">
+              <button
+                type="button"
+                onClick={() => setSelectedReport(null)}
+                className="min-h-11 rounded-lg bg-[#BE1E2D] px-5 text-sm font-bold text-white hover:bg-[#A51020]"
+              >
+                Tutup
+              </button>
+            </div>
+          </section>
         </div>
       )}
 

@@ -65,8 +65,8 @@ export default function VerifikasiLaporan() {
   const [toast, setToast] = useState('');
 
   const selectedCategory = categories.find((category) => category.id === selectedCategoryId) || categories[0];
-  const allChecksComplete = checksToComplete.every((item) => checks[item.id]);
-  const canVerify = allChecksComplete && !decision;
+  const hasCheckedItem = checksToComplete.some((item) => checks[item.id]);
+  const canVerify = hasCheckedItem && !decision;
   const pointsAfterVerification = report ? report.currentPoints + selectedCategory.points : 0;
 
   useEffect(() => {
@@ -237,7 +237,7 @@ export default function VerifikasiLaporan() {
           <div className="mt-5 border-t border-[#EDE4E2] pt-5">
             <h2 className="text-base font-bold">Pemeriksaan Sebelum Verifikasi</h2>
             <p className="mt-3 text-xs leading-relaxed text-[#8A7774]">
-              Checklist wajib sebelum verifikasi. Semua poin harus dicentang jika bukti lengkap.
+              Pilih minimal satu poin pemeriksaan yang sudah dilakukan. Tidak semua poin wajib dicentang.
             </p>
             <div className="mt-4 space-y-3">
               {checksToComplete.map((item) => (
@@ -310,19 +310,17 @@ export default function VerifikasiLaporan() {
                   Verifikasi &amp; Beri +{selectedCategory.points} Poin
                 </button>
                 <div className={`mt-3 flex gap-3 rounded-lg p-3.5 text-xs leading-relaxed ${
-                  allChecksComplete ? 'bg-[#D9FBE4] text-[#087A36]' : 'bg-[#FCE8E8] text-[#BE1E2D]'
+                  hasCheckedItem ? 'bg-[#D9FBE4] text-[#087A36]' : 'bg-[#FCE8E8] text-[#BE1E2D]'
                 }`}>
-                  {allChecksComplete
+                  {hasCheckedItem
                     ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
                     : <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />}
                   <div>
-                    <p className="font-bold">{allChecksComplete ? 'Pemeriksaan lengkap.' : 'Verifikasi belum aktif.'}</p>
+                    <p className="font-bold">{hasCheckedItem ? 'Pemeriksaan siap.' : 'Verifikasi belum aktif.'}</p>
                     <p className="mt-1">
-                      {allChecksComplete
-                        ? 'Pastikan bukti foto dan data sudah diperiksa sebelum keputusan.'
-                        : !checks.photo
-                          ? 'Lengkapi bukti foto terlebih dahulu agar verifikasi dapat diproses.'
-                          : 'Lengkapi semua checklist pemeriksaan agar verifikasi dapat diproses.'}
+                      {hasCheckedItem
+                        ? 'Pastikan poin yang dicentang sudah diperiksa sebelum mengambil keputusan.'
+                        : 'Centang minimal satu poin pemeriksaan agar verifikasi dapat diproses.'}
                     </p>
                   </div>
                 </div>

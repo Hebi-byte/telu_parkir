@@ -9,6 +9,7 @@ import {
   AlertCircle,
   Info,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useSatpamProfile } from '../SatpamProfileContext';
 
 const initialNotifications = [
@@ -144,13 +145,13 @@ export default function Topbar({ pageTitle, breadcrumbItems, onOpenMobileSidebar
                 <p className="text-xs font-bold">{profile.name}</p>
                 <p className="mt-0.5 text-xs text-[#8A7774]">ID SPM-0142 · Satpam</p>
               </div>
-              <button
-                type="button"
+              <Link
+                to="/satpam/profil"
                 onClick={() => setProfileOpen(false)}
                 className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-[#FAF8F7]"
               >
                 <UserRound className="h-4 w-4 text-[#8A7774]" /> Profil petugas
-              </button>
+              </Link>
               <button
                 type="button"
                 onClick={() => setProfileOpen(false)}
